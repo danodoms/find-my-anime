@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { debounce } from "lodash";
 
 function SearchBar({ setResults }: any) {
   // TODO: Add a search bar component that allows users to search for locations.
@@ -16,22 +17,27 @@ function SearchBar({ setResults }: any) {
   //     setResults(results);
   //   };
 
-  const fetchData = async (value: string) => {
+  async function fetchData(value: string): Promise<void> {
     try {
       const response = await fetch(`https://api.jikan.moe/v4/anime?q=${value}`);
       const data = await response.json();
+      console.log("Fetching data...");
 
       setResults(data.data);
     } catch (error) {
       console.error(error);
     }
-  };
-
-  function handleOnChange(value: string): void {
-    setAnime(value);
-    fetchData(value);
-    console.log(anime);
+    // console.log(anime);
   }
+
+  function handleOnChange(anime: string): void {
+    setAnime(anime);
+    debouncedRequest(anime);
+    // fetchData(anime);
+    // console.log(anime);
+  }
+
+  const debouncedRequest = debounce((anime: string) => fetchData(anime), 300);
 
   return (
     <div className="container">

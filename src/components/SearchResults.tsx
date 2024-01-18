@@ -4,15 +4,20 @@ function SearchResults({ results = [] }) {
   }
 
   return (
-    <ul className="list-group">
-      {results.map((result: any, id: any) => {
-        return (
-          <li className="list-group-item" key={id}>
-            {result.title_english}
-          </li>
-        );
-      })}
-    </ul>
+    <div className="container">
+      <ul
+        className="list-group"
+        style={{ overflow: "auto", maxHeight: "50vh", display: "float" }}
+      >
+        {results.map((result: any, id: any) => {
+          return (
+            <li className="list-group-item" key={id}>
+              {result.title}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 }
 
