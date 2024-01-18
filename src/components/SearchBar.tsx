@@ -1,12 +1,36 @@
 import { useState } from "react";
 
-function SearchBar() {
+function SearchBar({ setResults }: any) {
   // TODO: Add a search bar component that allows users to search for locations.
-  const [location, setLocation] = useState("");
+  const [anime, setAnime] = useState("");
 
-  function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setLocation(e.target.value);
-    console.log(location);
+  //   const fetchData = (value: string) => {
+  //     const results = fetch(`https://api.jikan.moe/v4/anime?q=${value}`)
+  //       .then((response) => response.json())
+  //       .then((data) => {
+  //         const results = data;
+  //         console.log(results);
+  //       })
+  //       .catch((error) => console.log(error));
+
+  //     setResults(results);
+  //   };
+
+  const fetchData = async (value: string) => {
+    try {
+      const response = await fetch(`https://api.jikan.moe/v4/anime?q=${value}`);
+      const data = await response.json();
+
+      setResults(data.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  function handleOnChange(value: string): void {
+    setAnime(value);
+    fetchData(value);
+    console.log(anime);
   }
 
   return (
@@ -17,9 +41,9 @@ function SearchBar() {
             type="text"
             className="form-control"
             id="exampleFormControlInput1"
-            placeholder="Search Location"
-            value={location}
-            onChange={handleOnChange}
+            placeholder="Search Anime"
+            value={anime}
+            onChange={(e) => handleOnChange(e.target.value)}
           />
         </div>
       </div>
