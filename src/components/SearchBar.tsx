@@ -2,24 +2,13 @@ import { useState } from "react";
 import { debounce } from "lodash";
 
 function SearchBar({ setResults }: any) {
-  // TODO: Add a search bar component that allows users to search for locations.
-  const [anime, setAnime] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
-  //   const fetchData = (value: string) => {
-  //     const results = fetch(`https://api.jikan.moe/v4/anime?q=${value}`)
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         const results = data;
-  //         console.log(results);
-  //       })
-  //       .catch((error) => console.log(error));
-
-  //     setResults(results);
-  //   };
-
-  async function fetchData(value: string): Promise<void> {
+  async function fetchData(): Promise<any> {
     try {
-      const response = await fetch(`https://api.jikan.moe/v4/anime?q=${value}`);
+      const response = await fetch(
+        `https://api.jikan.moe/v4/anime?q=${searchTerm}`
+      );
       const data = await response.json();
       console.log("Fetching data...");
 
@@ -27,17 +16,18 @@ function SearchBar({ setResults }: any) {
     } catch (error) {
       console.error(error);
     }
-    // console.log(anime);
   }
 
-  function handleOnChange(anime: string): void {
-    setAnime(anime);
-    debouncedRequest(anime);
-    // fetchData(anime);
-    // console.log(anime);
-  }
+  const debouncedRequest = debounce((searchTerm: string) => {
+    setSearchTerm(searchTerm);
 
-  const debouncedRequest = debounce((anime: string) => fetchData(anime), 300);
+    if (!searchTerm) {
+      setResults([]);
+      return;
+    }
+
+    fetchData();
+  }, 500);
 
   return (
     <div className="container">
@@ -48,8 +38,7 @@ function SearchBar({ setResults }: any) {
             className="form-control"
             id="exampleFormControlInput1"
             placeholder="Search Anime"
-            value={anime}
-            onChange={(e) => handleOnChange(e.target.value)}
+            onChange={(e) => debouncedRequest(e.target.value)}
           />
         </div>
       </div>

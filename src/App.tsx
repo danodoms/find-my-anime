@@ -8,6 +8,7 @@ import CoverArt from "./components/CoverArt";
 function App() {
   const [results, setResults] = useState([]);
   const [selectedAnime, setSelectedAnime] = useState({
+    id: 0,
     title: "Default title",
     image:
       "https://i.pinimg.com/236x/23/4b/16/234b16d7bb9750320b652584bda39bd3.jpg",
@@ -18,7 +19,7 @@ function App() {
       <div className="row border">
         <h1>Find My Anime</h1>
         <SearchBar setResults={setResults} />
-        <SearchResults results={results} />
+        <SearchResults results={results} setSelectedAnime={setSelectedAnime} />
       </div>
 
       <div className="row">

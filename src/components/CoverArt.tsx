@@ -1,8 +1,10 @@
-function CoverArt({ title }: any, { image }: any) {
+import "bootstrap/dist/css/bootstrap.min.css";
+
+function CoverArt({ title, image }: any) {
   return (
     <div className="container">
       <div className="row">
-        <img src={image} alt="anime image" />
+        <img className="img-fluid rounded" src={image} alt="anime image" />
       </div>
 
       <div className="row">
