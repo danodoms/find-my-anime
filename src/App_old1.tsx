@@ -1,8 +1,8 @@
 import "bootstrap/dist/css/bootstrap.min.css";
+import "@fortawesome/fontawesome-svg-core/styles.css";
 import SearchBar from "./components/SearchBar";
 import SearchResults from "./components/SearchResults";
 import DevSection from "./components/DevSection";
-import Recommendations from "./components/Recommendations";
 import { useState } from "react";
 import "./App.scss";
 import CoverArt from "./components/CoverArt";
@@ -17,27 +17,22 @@ function App() {
   });
 
   return (
-    <div className="container gap-4 background-bg p-4 gx-0 gy-0">
-      <div className="row">
-        <h1 className="display-6 text-icon">Find My Anime</h1>
+    <div className="container gap-4 background-bg p-4 gx-0 border">
+      <div className="row flex-column ">
+        <div className="col-4"></div>
+        <div className="col">
+          <h1 className="display-6 text-icon text-center">Find My Anime</h1>
+        </div>
+        <div className="col-4"></div>
       </div>
-      <SearchBar setResults={setResults} />
+
+      <div className="row">
+        <SearchBar setResults={setResults} />
+      </div>
+
       <SearchResults results={results} setSelectedAnime={setSelectedAnime} />
 
-      <div className="row p-2">
-        <div className="col">
-          <h4> Selected Anime </h4>
-        </div>
-        <CoverArt title={selectedAnime.title} image={selectedAnime.image} />
-      </div>
-
-      <div className="row p-2">
-        <div className="col">
-          <h4> Based on your selection</h4>
-        </div>
-        <Recommendations />
-      </div>
-      <DevSection />
+      {/* <DevSection /> */}
     </div>
   );
 }

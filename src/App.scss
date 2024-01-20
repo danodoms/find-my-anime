@@ -1,9 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;600;700;800&display=swap');
+
+$primary-color: #b78ddf;
+$darker-primary-color: #8362a3;
+$secondary-color: #e3c6e6;
+$background-color: #1d1d1d;
+$lighter-background-color: #222222;
+
+#root {
+    background-color: $background-color;
+}
+
+img {
+    width: 100%;
+    height: auto;
+}
+
+.row {
+    margin-left: 0; 
+  margin-right: 0;
+}
+
+input {
+    background-color: transparent !important;
+    color: $primary-color !important;
+    border: 2px solid $primary-color !important;
+}
+
+::placeholder {
+    color: $primary-color !important;
+}
+
+.gradient-overlay {
+    position: relative;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%, rgba(0,0,0,0) 100%); 
+  }
+
+  ReactPlayer{
+    z-index: 5;
+  }
+  
+.border-outline {
+    border: 1.5px solid $primary-color;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    
+    font-weight: bold;
+    font-family: 'Gabarito', sans-serif;
+    color: $primary-color;
 }
 
-.border {
-    border: 10px solid green;
+.text-icon {
+    font-family: 'Silkscreen', sans-serif;
+    font-weight: bold;
+    color: $primary-color;
 }
+
+.title {
+    font-weight: 700;
+}
+
+.backdrop {
+    height: 100vh;
+    width: 100vw;
+}
+
+.background-bg {
+    background-color: $background-color;
+}
+
+.primary-bg {
+    background-color: $primary-color;
+}
+
+.dark-text {
+    color: $background-color;
+}
+// .border-a {
+//     border: 1px solid rgb(255, 177, 177);
+// }
+
+// .border-b {
+//     border: 1px solid rgb(169, 255, 169);
+// }
+
+
+// .border-c {
+//     border: 1px solid rgb(190, 166, 255);
+// }

@@ -4,7 +4,7 @@ function SearchResults({ results = [], setSelectedAnime }: any) {
   }
 
   return (
-    <div className="container">
+    <div className="container position-absolute">
       <ul
         className="list-group"
         style={{ overflow: "auto", maxHeight: "50vh", display: "float" }}

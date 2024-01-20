@@ -2,7 +2,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import SearchBar from "./components/SearchBar";
 import SearchResults from "./components/SearchResults";
 import DevSection from "./components/DevSection";
-import Recommendations from "./components/Recommendations";
 import { useState } from "react";
 import "./App.scss";
 import CoverArt from "./components/CoverArt";
@@ -17,7 +16,7 @@ function App() {
   });
 
   return (
-    <div className="container gap-4 background-bg p-4 gx-0 gy-0">
+    <div className="container gap-4 background-bg p-4 gx-0 border">
       <div className="row">
         <h1 className="display-6 text-icon">Find My Anime</h1>
       </div>
@@ -31,12 +30,6 @@ function App() {
         <CoverArt title={selectedAnime.title} image={selectedAnime.image} />
       </div>
 
-      <div className="row p-2">
-        <div className="col">
-          <h4> Based on your selection</h4>
-        </div>
-        <Recommendations />
-      </div>
       <DevSection />
     </div>
   );

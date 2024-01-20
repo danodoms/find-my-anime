@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { debounce } from "lodash";
+import "@fortawesome/fontawesome-svg-core/styles.css";
 
 function SearchBar({ setResults }: any) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -30,17 +31,15 @@ function SearchBar({ setResults }: any) {
   }, 500);
 
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col">
-          <input
-            type="text"
-            className="form-control"
-            id="exampleFormControlInput1"
-            placeholder="Search Anime"
-            onChange={(e) => debouncedRequest(e.target.value)}
-          />
-        </div>
+    <div className="row">
+      <div className="col">
+        <input
+          type="text"
+          className="form-control"
+          id="exampleFormControlInput1"
+          placeholder="Search Anime"
+          onChange={(e) => debouncedRequest(e.target.value)}
+        />
       </div>
     </div>
   );
