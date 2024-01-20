@@ -1,8 +1,10 @@
 function DevSection() {
   return (
-    <div className="row p-4 rounded primary-bg text-center">
+    <div className="row p-4 rounded  text-center">
       <h5>About the Creator</h5>
-      <p>Hi, I'm danodoms and this is my first React.js project</p>
+      <p className="weight-regular">
+        Hi, I'm danodoms and this is my first React.js project
+      </p>
     </div>
   );
 }

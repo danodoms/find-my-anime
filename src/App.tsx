@@ -11,24 +11,33 @@ function App() {
   const [results, setResults] = useState([]);
   const [selectedAnime, setSelectedAnime] = useState({
     id: 0,
-    title: "Default title",
+    title: "Frieren: Beyond Journey's End",
     image:
-      "https://i.pinimg.com/236x/23/4b/16/234b16d7bb9750320b652584bda39bd3.jpg",
+      "https://cdn.animenewsnetwork.com/thumbnails/max600x600/cms/news.6/200445/frieren.jpg",
   });
 
   return (
     <div className="container gap-4 background-bg p-4 gx-0 gy-0">
       <div className="row">
-        <h1 className="display-6 text-icon">Find My Anime</h1>
+        <div className="border col">
+          <h1 className="display-6 text-icon">Find My Anime</h1>
+        </div>
+        <div className="col border align-items-center p-0">
+          <SearchBar setResults={setResults} />
+          <SearchResults
+            results={results}
+            setSelectedAnime={setSelectedAnime}
+          />
+        </div>
       </div>
-      <SearchBar setResults={setResults} />
-      <SearchResults results={results} setSelectedAnime={setSelectedAnime} />
 
       <div className="row p-2">
-        <div className="col">
-          <h4> Selected Anime </h4>
+        <div className="col border alighn-items-center text-center">
+          <h2 className="border"> Selected Anime </h2>
         </div>
-        <CoverArt title={selectedAnime.title} image={selectedAnime.image} />
+        <div className="col-lg border p-0">
+          <CoverArt title={selectedAnime.title} image={selectedAnime.image} />
+        </div>
       </div>
 
       <div className="row p-2">

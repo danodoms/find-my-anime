@@ -31,11 +31,11 @@ function SearchBar({ setResults }: any) {
   }, 500);
 
   return (
-    <div className="row">
+    <div className="row gx-0 gy-0 p-2">
       <div className="col">
         <input
           type="text"
-          className="form-control"
+          className="form-control flex-fill"
           id="exampleFormControlInput1"
           placeholder="Search Anime"
           onChange={(e) => debouncedRequest(e.target.value)}
