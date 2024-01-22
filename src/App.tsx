@@ -16,6 +16,8 @@ function App() {
       "https://cdn.animenewsnetwork.com/thumbnails/max600x600/cms/news.6/200445/frieren.jpg",
   });
 
+  const [recommendations, setRecommendations] = useState([]);
+
   return (
     <div className="container gap-4 background-bg p-4 gx-0 gy-0">
       <div className="row">
@@ -27,6 +29,7 @@ function App() {
           <SearchResults
             results={results}
             setSelectedAnime={setSelectedAnime}
+            setRecommendations={setRecommendations}
           />
         </div>
       </div>
@@ -44,7 +47,7 @@ function App() {
         <div className="col">
           <h4> Based on your selection</h4>
         </div>
-        <Recommendations />
+        <Recommendations recommendations={recommendations} />
       </div>
       <DevSection />
     </div>

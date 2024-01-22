@@ -9,7 +9,7 @@ function CoverArt({ title, image }: any) {
 
       <div className="col justify-content-start align-content-center">
         <div className="row">
-          <div className="col dark-text border p-4 d-flex align-items-center">
+          <div className="col dark-text border p-4 align-items-center">
             <p className="title display-6 m-0">{title}</p>
           </div>
         </div>

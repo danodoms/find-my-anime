@@ -1,4 +1,8 @@
-function SearchResults({ results = [], setSelectedAnime }: any) {
+function SearchResults({
+  results = [],
+  setSelectedAnime,
+  setRecommendations,
+}: any) {
   if (!Array.isArray(results)) {
     return <p>Results is not an array</p>;
   }
@@ -22,6 +26,7 @@ function SearchResults({ results = [], setSelectedAnime }: any) {
                 };
 
                 setSelectedAnime(selectedAnime);
+                getRecommendations(selectedAnime.id);
               }}
             >
               {result.title}
@@ -31,6 +36,20 @@ function SearchResults({ results = [], setSelectedAnime }: any) {
       </ul>
     </div>
   );
+
+  async function getRecommendations(anime_id: number): Promise<any> {
+    try {
+      const response = await fetch(
+        `https://api.jikan.moe/v4/anime/${anime_id}/recommendations`
+      );
+      const data = await response.json();
+      console.log("Fetching data...");
+
+      setRecommendations(data.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
 
 export default SearchResults;
