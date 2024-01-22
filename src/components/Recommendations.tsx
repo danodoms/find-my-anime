@@ -1,8 +1,11 @@
 import ReactPlayer from "react-player";
 import { useState } from "react";
+import { set } from "lodash";
 
 function Recommendations({ recommendations = [] }) {
-  const [url, setUrl] = useState("https://www.youtube.com/watch?v=itKPyGXrCVA");
+  const [trailer, setTrailer] = useState(
+    "https://www.youtube.com/watch?v=itKPyGXrCVA"
+  );
   const [playing, setPlaying] = useState(true);
   const [controls, setControls] = useState(true);
   const [muted, setMuted] = useState(true);
@@ -16,9 +19,13 @@ function Recommendations({ recommendations = [] }) {
   let [index, setIndex] = useState(0);
 
   function handleNext() {
-    console.log(recommendations);
     setIndex(index++);
-    console.log("Index: ", recommendations.length);
+    recommendations.map((recommendation: any, id: any) => {
+      if (id === index) {
+        setTitle(recommendation.entry.title);
+        setAnimeDetails(recommendation.entry.mal_id);
+      }
+    });
   }
 
   return (
@@ -53,7 +60,7 @@ function Recommendations({ recommendations = [] }) {
           <ReactPlayer
             style={{ borderRadius: "10px" }}
             className="rounded relative d-flex"
-            url={url}
+            url={trailer}
             playing={playing}
             muted={muted} //must be muted to enable autoplay feature (not in all cases)
             controls={false}
@@ -73,6 +80,26 @@ function Recommendations({ recommendations = [] }) {
       </div>
     </div>
   );
+
+  async function setAnimeDetails(anime_id: number): Promise<any> {
+    try {
+      const response = await fetch(
+        `https://api.jikan.moe/v4/anime/${anime_id}/full`
+      );
+      const data = await response.json();
+      console.log("Fetching data...");
+
+      setTrailer(data.data.trailer.url);
+      setSynopsis(limitCharacters(data.data.synopsis, 500));
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  //create a fucntion that accepts a string and limit characters to 500 and add ellipsis to end
+  function limitCharacters(str: string, n: number) {
+    return str?.length > n ? str.substr(0, n - 1) + "..." : str;
+  }
 }
 
 export default Recommendations;
