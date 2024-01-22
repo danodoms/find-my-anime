@@ -58,8 +58,8 @@ function Recommendations({ recommendations = [] }) {
             <div className="gradient-overlay"></div>
           </div>
           <ReactPlayer
+            className="rounded reactPlayer"
             style={{ borderRadius: "10px" }}
-            className="rounded relative d-flex"
             url={trailer}
             playing={playing}
             muted={muted} //must be muted to enable autoplay feature (not in all cases)

@@ -107,6 +107,11 @@ iframe {
     position: relative;
 }
 
+.reactPlayer {
+    height: auto !important;
+aspect-ratio: 16/9;
+}
+
 // .border-b {
 //     border: 1px solid rgb(169, 255, 169);
 // }
