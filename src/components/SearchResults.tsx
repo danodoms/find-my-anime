@@ -27,6 +27,7 @@ function SearchResults({
 
                 setSelectedAnime(selectedAnime);
                 getRecommendations(selectedAnime.id);
+                SearchResults([]);
               }}
             >
               {result.title}

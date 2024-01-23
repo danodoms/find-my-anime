@@ -18,26 +18,27 @@ function App() {
 
   const [recommendations, setRecommendations] = useState([]);
 
-  return (
-    <div className="container gap-4 background-bg p-4 gx-0 gy-0">
-      <div className="row">
-        <div className="border col-sm">
-          <h1 className="display-6 text-icon border m-0">Find My Anime</h1>
-        </div>
-        <div className="col-md border relative align-items-center p-0">
-          <SearchBar setResults={setResults} />
-          <SearchResults
-            results={results}
-            setSelectedAnime={setSelectedAnime}
-            setRecommendations={setRecommendations}
-          />
-        </div>
-      </div>
+  // console.log("recommendations: " + recommendations);
 
-      <div className="row align-items-center">
-        <div className="col border text-center">
-          <h2 className="border"> Selected Anime: </h2>
+  return (
+    <div className="container gap-4 p-2 background-bg gx-0 gy-0">
+      <div className="row pt-2 gap-4 justify-content-left gx-0">
+        <div className="col border">
+          <h1 className="display-6 text-icon border m-0 p-0">Find My Anime</h1>
+          <p className="weight-regular mb-2 p-1">
+            Get anime recommendations based on your fave animes
+          </p>
+
+          <div className="col-md border relative align-items-center p-0">
+            <SearchBar setResults={setResults} />
+            <SearchResults
+              results={results}
+              setSelectedAnime={setSelectedAnime}
+              setRecommendations={setRecommendations}
+            />
+          </div>
         </div>
+
         <div className="col-lg border p-0">
           <CoverArt title={selectedAnime.title} image={selectedAnime.image} />
         </div>
@@ -45,7 +46,7 @@ function App() {
 
       <div className="row">
         <div className="col p-2">
-          <h4 className="m-0"> Based on your selection</h4>
+          <h4 className="m-0 mb-1"> Based on your selection</h4>
         </div>
         <Recommendations recommendations={recommendations} />
       </div>
