@@ -1,8 +1,15 @@
+import { useContext } from "react";
+
+import { ResultsContext } from "../App";
+
 function SearchResults({
   results = [],
   setSelectedAnime,
   setRecommendations,
 }: any) {
+  const [resultsContext, setResultsContext] = useContext(ResultsContext);
+  // const { setResults } = useContext(ResultsContext);
+
   if (!Array.isArray(results)) {
     return <p>Results is not an array</p>;
   }
@@ -27,7 +34,7 @@ function SearchResults({
 
                 setSelectedAnime(selectedAnime);
                 getRecommendations(selectedAnime.id);
-                SearchResults([]);
+                setResultsContext([]);
               }}
             >
               {result.title}

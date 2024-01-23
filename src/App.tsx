@@ -3,9 +3,12 @@ import SearchBar from "./components/SearchBar";
 import SearchResults from "./components/SearchResults";
 import DevSection from "./components/DevSection";
 import Recommendations from "./components/Recommendations";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import React from "react";
 import "./App.scss";
 import CoverArt from "./components/CoverArt";
+
+export const ResultsContext = React.createContext<any>([]);
 
 function App() {
   const [results, setResults] = useState([]);
@@ -30,12 +33,14 @@ function App() {
           </p>
 
           <div className="col-md border relative align-items-center p-0">
-            <SearchBar setResults={setResults} />
-            <SearchResults
-              results={results}
-              setSelectedAnime={setSelectedAnime}
-              setRecommendations={setRecommendations}
-            />
+            <ResultsContext.Provider value={[results, setResults]}>
+              <SearchBar setResults={setResults} />
+              <SearchResults
+                results={results}
+                setSelectedAnime={setSelectedAnime}
+                setRecommendations={setRecommendations}
+              />
+            </ResultsContext.Provider>
           </div>
         </div>
 
