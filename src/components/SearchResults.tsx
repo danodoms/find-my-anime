@@ -1,19 +1,63 @@
-function SearchResults({ results = [] }) {
+import { useContext } from "react";
+
+import { ResultsContext } from "../App";
+
+function SearchResults({
+  results = [],
+  setSelectedAnime,
+  setRecommendations,
+}: any) {
+  const [resultsContext, setResultsContext] = useContext(ResultsContext);
+  // const { setResults } = useContext(ResultsContext);
+
   if (!Array.isArray(results)) {
-    return <p>No results</p>;
+    return <p>Results is not an array</p>;
   }
 
   return (
-    <ul className="list-group">
-      {results.map((result: any, id: any) => {
-        return (
-          <li className="list-group-item" key={id}>
-            {result.title_english}
-          </li>
-        );
-      })}
-    </ul>
+    <div className="container position-absolute">
+      <ul
+        className="list-group"
+        style={{ overflow: "auto", maxHeight: "50vh", display: "float" }}
+      >
+        {results.map((result: any, id: any) => {
+          return (
+            <li
+              className="list-group-item"
+              key={id}
+              onClick={() => {
+                const selectedAnime = {
+                  id: result.mal_id,
+                  title: result.title,
+                  image: result.images.jpg.image_url,
+                };
+
+                setSelectedAnime(selectedAnime);
+                getRecommendations(selectedAnime.id);
+                setResultsContext([]);
+              }}
+            >
+              {result.title}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
+
+  async function getRecommendations(anime_id: number): Promise<any> {
+    try {
+      const response = await fetch(
+        `https://api.jikan.moe/v4/anime/${anime_id}/recommendations`
+      );
+      const data = await response.json();
+      console.log("Fetching data...");
+
+      setRecommendations(data.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
 
 export default SearchResults;

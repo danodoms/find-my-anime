@@ -1,51 +1,45 @@
 import { useState } from "react";
+import { debounce } from "lodash";
+import "@fortawesome/fontawesome-svg-core/styles.css";
 
 function SearchBar({ setResults }: any) {
-  // TODO: Add a search bar component that allows users to search for locations.
-  const [anime, setAnime] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
-  //   const fetchData = (value: string) => {
-  //     const results = fetch(`https://api.jikan.moe/v4/anime?q=${value}`)
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         const results = data;
-  //         console.log(results);
-  //       })
-  //       .catch((error) => console.log(error));
-
-  //     setResults(results);
-  //   };
-
-  const fetchData = async (value: string) => {
+  async function fetchData(): Promise<any> {
     try {
-      const response = await fetch(`https://api.jikan.moe/v4/anime?q=${value}`);
+      const response = await fetch(
+        `https://api.jikan.moe/v4/anime?q=${searchTerm}`
+      );
       const data = await response.json();
+      console.log("Fetching data...");
 
       setResults(data.data);
     } catch (error) {
       console.error(error);
     }
-  };
-
-  function handleOnChange(value: string): void {
-    setAnime(value);
-    fetchData(value);
-    console.log(anime);
   }
 
+  const debouncedRequest = debounce((searchTerm: string) => {
+    setSearchTerm(searchTerm);
+
+    if (!searchTerm) {
+      setResults([]);
+      return;
+    }
+
+    fetchData();
+  }, 500);
+
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col">
-          <input
-            type="text"
-            className="form-control"
-            id="exampleFormControlInput1"
-            placeholder="Search Anime"
-            value={anime}
-            onChange={(e) => handleOnChange(e.target.value)}
-          />
-        </div>
+    <div className="row gx-0 gy-0">
+      <div className="col">
+        <input
+          type="text"
+          className="form-control flex-fill"
+          id="exampleFormControlInput1"
+          placeholder="Search your favorite anime"
+          onChange={(e) => debouncedRequest(e.target.value)}
+        />
       </div>
     </div>
   );
