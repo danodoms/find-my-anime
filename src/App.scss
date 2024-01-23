@@ -12,7 +12,7 @@ $lighter-background-color: #222222;
 
 #root, html {
     background-color: $background-color;
-}
+}    
 
 img {
     width: 100%;
@@ -55,6 +55,7 @@ input {
 
   ReactPlayer{
     z-index: 5;
+
   }
   
 .border-outline {
@@ -63,8 +64,7 @@ input {
 
 iframe {
     border-radius: 0.4em;
-    width:100%;
-    height: 100%;
+    
 }
 
 * {
@@ -111,6 +111,8 @@ iframe {
     position: relative;
 }
   
+.react-player {
+}
 // .border-b {
 //     border: 1px solid rgb(169, 255, 169);
 // }

@@ -14,9 +14,8 @@ function App() {
   const [results, setResults] = useState([]);
   const [selectedAnime, setSelectedAnime] = useState({
     id: 0,
-    title: "Frieren: Beyond Journey's End",
-    image:
-      "https://cdn.animenewsnetwork.com/thumbnails/max600x600/cms/news.6/200445/frieren.jpg",
+    title: "",
+    image: "",
   });
 
   const [recommendations, setRecommendations] = useState([]);

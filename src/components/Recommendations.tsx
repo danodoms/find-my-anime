@@ -4,6 +4,7 @@ import { set } from "lodash";
 
 function Recommendations({ recommendations = [] }) {
   const [trailer, setTrailer] = useState("");
+  const [coverArt, setCoverArt] = useState("");
   // https://www.youtube.com/watch?v=itKPyGXrCVA
   const [playing, setPlaying] = useState(true);
   const [controls, setControls] = useState(true);
@@ -19,7 +20,7 @@ function Recommendations({ recommendations = [] }) {
     initializeRecommendations();
 
     return () => {
-      setIndex(1);
+      setIndex(0);
       console.log("Index is set to", index);
     };
   }, [recommendations]);
@@ -67,7 +68,17 @@ function Recommendations({ recommendations = [] }) {
         setAnimeDetails(recommendation.entry.mal_id);
       }
     });
-    setIndex(++index);
+    setIndex((index += 1));
+  }
+
+  function handlePrevious() {
+    recommendations.map((recommendation: any, id: any) => {
+      if (id === index) {
+        setTitle(recommendation.entry.title);
+        setAnimeDetails(recommendation.entry.mal_id);
+      }
+    });
+    setIndex((index -= 1));
   }
 
   function initializeRecommendations() {
@@ -98,7 +109,13 @@ function Recommendations({ recommendations = [] }) {
                 >
                   {muted ? "Unmute" : "Mute"}
                 </button>
-                <button className="btn">I like this</button>
+
+                {index != 0 && (
+                  <button className="btn" onClick={handlePrevious}>
+                    Previous
+                  </button>
+                )}
+
                 <button className="btn" onClick={handleNext}>
                   Next
                 </button>
@@ -106,32 +123,40 @@ function Recommendations({ recommendations = [] }) {
             </div>
           </div>
 
-          <div className="col relative rounded gx-0">
+          <div className="col-md relative rounded gx-0">
             <div className="col bg-primary gx-0 gy-0">
-              <div className="gradient-overlay"></div>
+              <div className="rounded gradient-overlay"></div>
             </div>
-            <div className="player-wrapper">
-              <ReactPlayer
-                className="rounded react-player"
-                style={{ borderRadius: "10px" }}
-                url={trailer}
-                playing={playing}
-                muted={muted} //must be muted to enable autoplay feature (not in all cases)
-                controls={false}
-                width="100%"
-                loop
-                onReady={() => {}}
-                onStart={() => {
-                  setMuted(false);
-                  // @ts-ignore
-                  this.player.volume = 0.8; // fade volume up over 0.5 seconds
-                  // @ts-ignore
-                  this.player.fadeIn(0.5);
-                  //@ts-ignore
-                  this.player.seekTo(30);
-                }}
-              />
-            </div>
+
+            {trailer == "" ? (
+              <div className="cover-art-wrapper">
+                <img src={coverArt} alt="" />
+              </div>
+            ) : (
+              <div className="player-wrapper">
+                <ReactPlayer
+                  className="rounded react-player"
+                  style={{ borderRadius: "10px" }}
+                  url={trailer}
+                  playing={playing}
+                  muted={muted} //must be muted to enable autoplay feature (not in all cases)
+                  controls={false}
+                  width="100%"
+                  // height="100%"
+                  loop
+                  onReady={() => {}}
+                  onStart={() => {
+                    setMuted(false);
+                    // @ts-ignore
+                    this.player.volume = 0.8; // fade volume up over 0.5 seconds
+                    // @ts-ignore
+                    this.player.fadeIn(0.5);
+                    //@ts-ignore
+                    this.player.seekTo(30);
+                  }}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -146,8 +171,13 @@ function Recommendations({ recommendations = [] }) {
       const data = await response.json();
       console.log("Fetching data...");
 
+      setTrailer("");
       setTrailer(data.data.trailer.url);
       setSynopsis(limitCharacters(data.data.synopsis, 500));
+      setCoverArt(data.data.images.jpg.large_image_url);
+      console.log("title: ", title);
+      console.log("cover art for this recommendation: ", coverArt);
+      console.log("trailer: ", trailer);
     } catch (error) {
       console.error(error);
     }
