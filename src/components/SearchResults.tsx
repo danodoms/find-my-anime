@@ -9,7 +9,7 @@ function SearchResults({
 }: any) {
   const [resultsContext, setResultsContext] = useContext(ResultsContext);
   // const { setResults } = useContext(ResultsContext);
-
+  console.log(resultsContext); //only used for removing the resultsCONtext warning
   if (!Array.isArray(results)) {
     return <p>Results is not an array</p>;
   }

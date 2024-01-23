@@ -3,7 +3,7 @@ import SearchBar from "./components/SearchBar";
 import SearchResults from "./components/SearchResults";
 import DevSection from "./components/DevSection";
 import Recommendations from "./components/Recommendations";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import React from "react";
 import "./App.scss";
 import CoverArt from "./components/CoverArt";

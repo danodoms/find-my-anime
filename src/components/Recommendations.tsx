@@ -1,15 +1,14 @@
 import ReactPlayer from "react-player";
 import { useEffect, useState } from "react";
-import { set } from "lodash";
 
 function Recommendations({ recommendations = [] }) {
   const [trailer, setTrailer] = useState("");
   const [coverArt, setCoverArt] = useState("");
   // https://www.youtube.com/watch?v=itKPyGXrCVA
-  const [playing, setPlaying] = useState(true);
-  const [controls, setControls] = useState(true);
+  const [playing] = useState(true);
+  // const [controls, setControls] = useState(true);
   const [muted, setMuted] = useState(true);
-  const [loop, setLoop] = useState(true);
+  // const [loop, setLoop] = useState(true);
 
   const [title, setTitle] = useState("");
   // Frieren: Beyond Journey's End
