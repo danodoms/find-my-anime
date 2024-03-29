@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function Library({ animeList = [1] }) {
+function Library({ animeList = [], user: object }) {
   const [library, setLibrary] = useState([]);
 
   useEffect(() => {

@@ -4,10 +4,15 @@ import SearchResults from "./components/SearchResults";
 import DevSection from "./components/DevSection";
 import Recommendations from "./components/Recommendations";
 import Library from "./components/Library";
+import SignIn from "./components/SignIn";
 import { useState } from "react";
 import React from "react";
 import "./App.scss";
 import CoverArt from "./components/CoverArt";
+
+//FIREBASE RELATED IMPORTS
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth, provider } from "./firebase.js";
 
 export const ResultsContext = React.createContext<any>([]);
 
@@ -18,6 +23,10 @@ function App() {
     title: "",
     image: "",
   });
+
+  const [user, loading, error] = useAuthState(auth);
+
+  console.log(user);
 
   const [recommendations, setRecommendations] = useState([]);
 
@@ -60,7 +69,7 @@ function App() {
         <div className="col p-2">
           <h4 className="m-0 mb-1"> Library</h4>
         </div>
-        <Library />
+        {user ? <Library /> : <SignIn />}
       </div>
 
       <DevSection />
