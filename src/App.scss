@@ -114,6 +114,15 @@ iframe {
 
 .react-player {
 }
+
+.circular {
+  border-radius: 50%;
+}
+
+.square-img {
+  object-fit: cover; /* This will ensure the image covers the whole area without distortion */
+}
+
 // .border-b {
 //     border: 1px solid rgb(169, 255, 169);
 // }

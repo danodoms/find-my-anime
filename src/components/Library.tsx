@@ -1,22 +1,57 @@
 import { useEffect, useState } from "react";
+import { db } from "../firebase";
+import { collection, getDocs, where, query } from "firebase/firestore";
 
-function Library({ animeList = [], user, loading, error }: LibraryProps) {
+function Library({ userProp, loading, error }: LibraryProps) {
+  const [user] = useState(userProp);
   const [library, setLibrary] = useState([]);
 
   interface LibraryProps {
-    animeList: number[]; // Assuming animeList is an array of numbers (IDs)
-    user: any; // Consider defining a more specific type for user
+    userProp: object;
     loading: boolean;
     error?: Error; // Optional, assuming error might not always be provided
   }
 
   useEffect(() => {
-    if (animeList.length > 0) {
-      fetchAllAnimes();
-    }
-  }, []);
+    console.log("current user state: ", user);
+    const fetchData = async () => {
+      if (user) {
+        const animeList = await fetchUserAnimes();
+        await fetchAllAnimes(animeList);
+        console.log("fetching anime ids from firestore");
+      }
+    };
+
+    fetchData();
+  }, [user]);
 
   return renderLibrary();
+
+  async function fetchUserAnimes() {
+    if (!user) {
+      console.error("No user logged in");
+      return;
+    }
+
+    try {
+      // const colRef = collection(db, "animeList");
+      // const q = query(colRef, where("user_id", "==", user.uid));
+
+      const getAnimes = await getDocs(collection(db, "animeList"));
+      const animes = [];
+
+      getAnimes.forEach((doc) => {
+        animes.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+
+      return animes[0].anime_ids;
+    } catch (error) {
+      console.error("Failed to fetch user animes:", error);
+    }
+  }
 
   // function renderLibrary() {
   //   if (animeList.length > 0) {
@@ -45,7 +80,7 @@ function Library({ animeList = [], user, loading, error }: LibraryProps) {
     return (
       <div className="container rounded gx-0 gy-0">
         <div className="row rounded bg-black">
-          <div className="row p-2 primary-bg rounded">
+          <div className="row p-0 primary-bg rounded">
             {loading ? (
               <>
                 <h4 className="m-0 mb-1 col">Sign in</h4>
@@ -54,7 +89,7 @@ function Library({ animeList = [], user, loading, error }: LibraryProps) {
             ) : (
               <>
                 <img
-                  className="col-sm img-fluid rounded"
+                  className="col-sm-1 circular square-img p-3"
                   src={user?.photoURL}
                   alt="user profile picture"
                 />
@@ -79,12 +114,13 @@ function Library({ animeList = [], user, loading, error }: LibraryProps) {
     );
   }
 
-  async function fetchAllAnimes() {
+  async function fetchAllAnimes(animeList: []) {
     const promises = animeList.map((anime_id: number) =>
       getAnimeDetails(anime_id)
     );
     const results = await Promise.all(promises);
     setLibrary(results);
+    console.log("library: ", library);
   }
 
   async function getAnimeDetails(anime_id: number): Promise<any> {

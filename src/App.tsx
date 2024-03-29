@@ -70,12 +70,7 @@ function App() {
           <h4 className="m-0 mb-1"> Library</h4>
         </div>
         {user ? (
-          <Library
-            animeList={[1]}
-            user={user}
-            loading={loading}
-            error={error}
-          />
+          <Library userProp={user} loading={loading} error={error} />
         ) : (
           <SignIn />
         )}
