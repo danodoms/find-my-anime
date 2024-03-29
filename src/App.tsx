@@ -65,11 +65,20 @@ function App() {
         <Recommendations recommendations={recommendations} />
       </div>
 
-      <div className="row">
+      <div className="row ">
         <div className="col p-2">
           <h4 className="m-0 mb-1"> Library</h4>
         </div>
-        {user ? <Library /> : <SignIn />}
+        {user ? (
+          <Library
+            animeList={[1]}
+            user={user}
+            loading={loading}
+            error={error}
+          />
+        ) : (
+          <SignIn />
+        )}
       </div>
 
       <DevSection />
