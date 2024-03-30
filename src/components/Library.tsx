@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { db } from "../firebase";
+import { db, auth } from "../firebase";
 import { collection, getDocs, where, query } from "firebase/firestore";
+import { signOut } from "firebase/auth";
 
 function Library({ userProp, loading, error }: LibraryProps) {
   const [user] = useState(userProp);
   const [library, setLibrary] = useState([]);
+  // let library = [];
 
   interface LibraryProps {
     userProp: object;
@@ -96,7 +98,9 @@ function Library({ userProp, loading, error }: LibraryProps) {
                 <h5 className="m-0 dark-text col align-self-center">
                   Signed in as {user?.displayName}
                 </h5>
-                <button className="btn col-4 ">Sign out</button>
+                <button className="btn col-4 " onClick={handleSignOut}>
+                  Sign out
+                </button>
               </>
             )}
           </div>
@@ -104,8 +108,16 @@ function Library({ userProp, loading, error }: LibraryProps) {
           {library.map((anime: number, id: any) => {
             console.log("title: ", anime.data.title);
             return (
-              <div key={id} className="row rounded bg-black">
-                <p className="weight-regular m-0">{anime.data.title}</p>
+              <div key={id} className="row rounded p-2 bg-black">
+                <img
+                  className="col-sm-1 rounded p-1"
+                  src={anime.data.images.jpg.image_url}
+                  alt=""
+                />
+                <p className="align-self-center weight-regular m-0 col">
+                  {anime.data.title}
+                </p>
+                <button className="btn col justify-content-end">Remove</button>
               </div>
             );
           })}
@@ -119,7 +131,8 @@ function Library({ userProp, loading, error }: LibraryProps) {
       getAnimeDetails(anime_id)
     );
     const results = await Promise.all(promises);
-    setLibrary(results);
+    const validResults = results.filter((result) => result !== null);
+    setLibrary(validResults);
     console.log("library: ", library);
   }
 
@@ -128,13 +141,32 @@ function Library({ userProp, loading, error }: LibraryProps) {
       const response = await fetch(
         `https://api.jikan.moe/v4/anime/${anime_id}/full`
       );
+
+      if (!response.ok) {
+        // if HTTP-status is 200-299
+        // throws an Error object with status
+        throw new Error(response.status.toString());
+      }
       const data = await response.json();
       console.log(data);
       return data; // Return the fetched data directly
     } catch (error) {
+      console.log("mal_id may be invalid: ", anime_id);
       console.error(error);
       return null; // Return null or an appropriate value in case of an error
     }
+  }
+
+  function handleSignOut() {
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+        console.log("Signed out");
+      })
+      .catch((error) => {
+        // An error happened.
+        console.log(error);
+      });
   }
 }
 
