@@ -1,7 +1,15 @@
 import ReactPlayer from "react-player";
 import { useEffect, useState } from "react";
+import { db, auth } from "../firebase";
+import { collection, getDocs, where, query, addDoc } from "firebase/firestore";
+import { signOut } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
+
+import { addToLibrary } from "../models/AnimeList";
 
 function Recommendations({ recommendations = [] }) {
+  const [user, loading, error] = useAuthState(auth);
+
   const [trailer, setTrailer] = useState("");
   const [coverArt, setCoverArt] = useState("");
   // https://www.youtube.com/watch?v=itKPyGXrCVA
@@ -11,9 +19,12 @@ function Recommendations({ recommendations = [] }) {
   // const [loop, setLoop] = useState(true);
 
   const [title, setTitle] = useState("");
+  const [animeId, setAnimeId] = useState();
   // Frieren: Beyond Journey's End
   const [synopsis, setSynopsis] = useState("");
   ("It follows an elf mage, Frieren, after she and her companions defeat the Demon King and go back to their regular lives. Except Frieren is near-immortal, and the rest of the party is human. She spends the next fifty years off exploring and learning more magic... while her former companions age and approach death.");
+
+  let [index, setIndex] = useState(1);
 
   useEffect(() => {
     initializeRecommendations();
@@ -23,8 +34,6 @@ function Recommendations({ recommendations = [] }) {
       console.log("Index is set to", index);
     };
   }, [recommendations]);
-
-  let [index, setIndex] = useState(1);
 
   return renderRecommendations();
 
@@ -80,6 +89,12 @@ function Recommendations({ recommendations = [] }) {
     setIndex((index -= 1));
   }
 
+  function handleAddToLibrary() {
+    if (user?.uid && animeId) {
+      addToLibrary(animeId, user.uid);
+    }
+  }
+
   function initializeRecommendations() {
     recommendations.map((recommendation: any, id: any) => {
       if (id === 0) {
@@ -117,6 +132,10 @@ function Recommendations({ recommendations = [] }) {
 
                 <button className="btn" onClick={handleNext}>
                   Next
+                </button>
+
+                <button className="btn" onClick={handleAddToLibrary}>
+                  Add to Library
                 </button>
               </div>
             </div>
@@ -172,6 +191,7 @@ function Recommendations({ recommendations = [] }) {
 
       setTrailer("");
       setTrailer(data.data.trailer.url);
+      setAnimeId(data.data.mal_id);
       setSynopsis(limitCharacters(data.data.synopsis, 500));
       setCoverArt(data.data.images.jpg.large_image_url);
       console.log("title: ", title);

@@ -3,6 +3,8 @@ import { db, auth } from "../firebase";
 import { collection, getDocs, where, query } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 
+import { getAnimeListByUserId } from "../models/AnimeList";
+
 function Library({ userProp, loading, error }: LibraryProps) {
   const [user] = useState(userProp);
   const [library, setLibrary] = useState([]);
@@ -35,24 +37,24 @@ function Library({ userProp, loading, error }: LibraryProps) {
       return;
     }
 
-    try {
-      // const colRef = collection(db, "animeList");
-      // const q = query(colRef, where("user_id", "==", user.uid));
+    return getAnimeListByUserId(user.uid);
 
-      const getAnimes = await getDocs(collection(db, "animeList"));
-      const animes = [];
+    // try {
 
-      getAnimes.forEach((doc) => {
-        animes.push({
-          id: doc.id,
-          ...doc.data(),
-        });
-      });
+    //   const getAnimes = await getDocs(collection(db, "animeList"));
+    //   const animes = [];
 
-      return animes[0].anime_ids;
-    } catch (error) {
-      console.error("Failed to fetch user animes:", error);
-    }
+    //   getAnimes.forEach((doc) => {
+    //     animes.push({
+    //       id: doc.id,
+    //       ...doc.data(),
+    //     });
+    //   });
+
+    //   return animes[0].anime_ids;
+    // } catch (error) {
+    //   console.error("Failed to fetch user animes:", error);
+    // }
   }
 
   // function renderLibrary() {
