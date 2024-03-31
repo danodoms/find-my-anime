@@ -9,18 +9,13 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       manifest: {
-        name: "My Awesome App",
-        short_name: "MyApp",
-        description: "My Awesome App description",
+        name: "Find My Anime",
+        short_name: "Find My Anime",
+        description: "Get anime recommendations based on your fave animes",
         theme_color: "#ffffff",
         icons: [
           {
-            src: "pwa-192x192.png",
-            sizes: "192x192",
-            type: "image/png",
-          },
-          {
-            src: "pwa-512x512.png",
+            src: "/src/public/icon-512.png",
             sizes: "512x512",
             type: "image/png",
           },
@@ -28,5 +23,5 @@ export default defineConfig({
       },
     }),
   ],
-  base: "/find-my-anime/",
+  base: "",
 });
