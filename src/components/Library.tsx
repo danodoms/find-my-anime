@@ -1,20 +1,27 @@
 import { useEffect, useState } from "react";
-import { db, auth } from "../firebase";
-import { collection, getDocs, where, query } from "firebase/firestore";
+import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
 
 import { getAnimeListByUserId } from "../models/AnimeList";
+import { Anime } from "../interfaces/jikan";
+import { User } from "firebase/auth";
 
-function Library({ userProp, loading, error }: LibraryProps) {
-  const [user] = useState(userProp);
-  const [library, setLibrary] = useState([]);
+// interface AuthUser {
+//   photoURL: string;
+//   uid: string;
+//   displayName: string;
+// }
+
+interface LibraryProps {
+  userProp: User;
+  loading: boolean;
+  error?: Error; // Optional, assuming error might not always be provided
+}
+
+function Library({ userProp, loading }: LibraryProps) {
+  const [user] = useState<User>(userProp);
+  const [library, setLibrary] = useState<Anime[]>([]);
   // let library = [];
-
-  interface LibraryProps {
-    userProp: object;
-    loading: boolean;
-    error?: Error; // Optional, assuming error might not always be provided
-  }
 
   useEffect(() => {
     console.log("current user state: ", user);
@@ -38,47 +45,7 @@ function Library({ userProp, loading, error }: LibraryProps) {
     }
 
     return getAnimeListByUserId(user.uid);
-
-    // try {
-
-    //   const getAnimes = await getDocs(collection(db, "animeList"));
-    //   const animes = [];
-
-    //   getAnimes.forEach((doc) => {
-    //     animes.push({
-    //       id: doc.id,
-    //       ...doc.data(),
-    //     });
-    //   });
-
-    //   return animes[0].anime_ids;
-    // } catch (error) {
-    //   console.error("Failed to fetch user animes:", error);
-    // }
   }
-
-  // function renderLibrary() {
-  //   if (animeList.length > 0) {
-  //     return renderLibraryWithContent();
-  //   } else {
-  //     return renderNoLibrary();
-  //   }
-  // }
-
-  // function renderNoLibrary() {
-  //   return (
-  //     <div className="container rounded gx-0 gy-0">
-  //       <div className="row rounded bg-black">
-  //         <div className="col p-4">
-  //           <h4 className="m-0 mb-1"> Your Library is Empty</h4>
-  //           <p className="weight-regular m-0">
-  //             Add Animes to Your Library by clicking on "Add to Library"
-  //           </p>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-  // }
 
   function renderLibrary() {
     return (
@@ -94,7 +61,7 @@ function Library({ userProp, loading, error }: LibraryProps) {
               <>
                 <img
                   className="col-sm-1 circular square-img p-3"
-                  src={user?.photoURL}
+                  src={user.photoURL || undefined}
                   alt="user profile picture"
                 />
                 <h5 className="m-0 dark-text col align-self-center">
@@ -107,7 +74,7 @@ function Library({ userProp, loading, error }: LibraryProps) {
             )}
           </div>
 
-          {library.map((anime: number, id: any) => {
+          {library.map((anime: Anime, id: number) => {
             console.log("title: ", anime.data.title);
             return (
               <div key={id} className="row rounded p-2 bg-black">
@@ -133,12 +100,18 @@ function Library({ userProp, loading, error }: LibraryProps) {
       getAnimeDetails(anime_id)
     );
     const results = await Promise.all(promises);
-    const validResults = results.filter((result) => result !== null);
+
+    function isAnime(obj: any): obj is Anime {
+      return obj && obj.data !== undefined;
+    }
+
+    const validResults: Anime[] = results.filter(isAnime);
+
     setLibrary(validResults);
     console.log("library: ", library);
   }
 
-  async function getAnimeDetails(anime_id: number): Promise<any> {
+  async function getAnimeDetails(anime_id: number): Promise<object> {
     try {
       const response = await fetch(
         `https://api.jikan.moe/v4/anime/${anime_id}/full`
@@ -155,7 +128,7 @@ function Library({ userProp, loading, error }: LibraryProps) {
     } catch (error) {
       console.log("mal_id may be invalid: ", anime_id);
       console.error(error);
-      return null; // Return null or an appropriate value in case of an error
+      return {}; // Return null or an appropriate value in case of an error
     }
   }
 

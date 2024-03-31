@@ -1,0 +1,11 @@
+{
+  "short_name": "Find My Anime",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512"
+    }
+  ],
+  "display": "standalone"
+}

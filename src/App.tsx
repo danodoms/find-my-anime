@@ -12,9 +12,9 @@ import CoverArt from "./components/CoverArt";
 
 //FIREBASE RELATED IMPORTS
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, provider } from "./firebase.js";
+import { auth } from "./firebase";
 
-export const ResultsContext = React.createContext<any>([]);
+export const ResultsContext = React.createContext<[any[], any]>([[], 0]);
 
 function App() {
   const [results, setResults] = useState([]);

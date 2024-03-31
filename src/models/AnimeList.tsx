@@ -8,7 +8,7 @@ import {
   doc,
   arrayUnion,
 } from "firebase/firestore";
-import { db } from "../firebase.js"; // Adjust the import path according to your project structure
+import { db } from "../firebase"; // Adjust the import path according to your project structure
 
 /////////////////////////////////////ADD FUNCTIONS
 
@@ -31,7 +31,7 @@ export const addToLibrary = async (animeId: number, userId: string) => {
   }
 };
 
-const getUserDocumentId = async (userId: string): Promise<any> => {
+const getUserDocumentId = async (userId: string): Promise<string> => {
   const colRef = collection(db, "animeList");
   const q = query(colRef, where("user_id", "==", userId));
   try {
@@ -41,7 +41,7 @@ const getUserDocumentId = async (userId: string): Promise<any> => {
     return documentIds[0]; // Returns an array of document IDs
   } catch (error) {
     console.error("Error fetching user document: ", error);
-    return false; // Returns an empty array in case of an error
+    return ""; // Returns an empty array in case of an error
   }
 };
 
@@ -70,7 +70,7 @@ export const getAnimeListByUserId = async (userId: string) => {
     const q = query(colRef, where("user_id", "==", userId));
 
     const querySnapshot = await getDocs(q);
-    const animes = [];
+    const animes: any = [];
 
     querySnapshot.forEach((doc) => {
       animes.push({

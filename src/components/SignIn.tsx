@@ -1,4 +1,4 @@
-import { auth, provider } from "../firebase.js"; // Adjust the path as necessary
+import { auth, provider } from "../firebase"; // Adjust the path as necessary
 import { signInWithPopup } from "firebase/auth";
 
 function SignIn() {
