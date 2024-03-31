@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "serve": "http-server dist -c-1",
+    "serve": "PORT=4433 serve dist",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "build": "tsc && vite build",
