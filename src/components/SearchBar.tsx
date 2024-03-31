@@ -3,9 +3,9 @@ import { debounce } from "lodash";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 
 function SearchBar({ setResults }: any) {
-  const [searchTerm, setSearchTerm] = useState("");
+  // const [searchTerm, setSearchTerm] = useState("");
 
-  async function fetchData(): Promise<any> {
+  async function fetchData(searchTerm: string): Promise<any> {
     try {
       const response = await fetch(
         `https://api.jikan.moe/v4/anime?q=${searchTerm}`
@@ -20,14 +20,15 @@ function SearchBar({ setResults }: any) {
   }
 
   const debouncedRequest = debounce((searchTerm: string) => {
-    setSearchTerm(searchTerm);
+    // setSearchTerm(searchTerm);
+    console.log;
 
     if (!searchTerm) {
       setResults([]);
       return;
     }
 
-    fetchData();
+    fetchData(searchTerm);
   }, 500);
 
   return (

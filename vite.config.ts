@@ -15,9 +15,25 @@ export default defineConfig({
         theme_color: "#ffffff",
         icons: [
           {
-            src: "/src/public/icon-512.png",
+            src: "/src/public/icons/icon-512.png",
             sizes: "512x512",
             type: "image/png",
+          },
+        ],
+        screenshots: [
+          {
+            src: "/src/public/screenshots/desktop.png",
+            sizes: "1291x699",
+            type: "image/png",
+            form_factor: "wide",
+            label: "Homescreen of Awesome App",
+          },
+          {
+            src: "/src/public/screenshots/mobile.png",
+            sizes: "1082x2402",
+            type: "image/png",
+            form_factor: "narrow",
+            label: "Homescreen of Awesome App",
           },
         ],
       },
