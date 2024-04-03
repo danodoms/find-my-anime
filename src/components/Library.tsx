@@ -3,7 +3,7 @@ import { auth, db } from "../firebase";
 import { signOut } from "firebase/auth";
 import { onSnapshot, collection, doc } from "firebase/firestore";
 
-import { getAnimeListByUserId } from "../models/AnimeList";
+import { getAnimeListByUserId, deleteFromLibrary } from "../models/AnimeList";
 import { Anime } from "../interfaces/jikan";
 import { User } from "firebase/auth";
 
@@ -38,20 +38,27 @@ function Library({ userProp, loading }: LibraryProps) {
 
   useEffect(() => {
     if (user) {
-      const unsubscribe = onSnapshot(animesSubcolRef, (snapshot) => {
-        console.log("WOWWWWWWWWW YOUR DATABASEEE HASSS EBEEENNN UPPPDATEEEDDD");
-        console.log("snapshot: ", snapshot);
+      const unsubscribe = onSnapshot(
+        animesSubcolRef,
+        { includeMetadataChanges: true },
+        (snapshot) => {
+          console.log(
+            "WOWWWWWWWWW YOUR DATABASEEE HASSS EBEEENNN UPPPDATEEEDDD"
+          );
+          console.log("snapshot: ", snapshot);
 
-        // Create an array to hold the mal_id values
-        const animeIds = snapshot.docs.map((doc) => doc.data().anime_id);
-        console.log("animeIds: ", animeIds);
+          // Create an array to hold the mal_id values
+          const animeIds = snapshot.docs.map((doc) => doc.data().anime_id);
+          console.log("animeIds: ", animeIds);
 
-        fetchAllAnimes(animeIds);
+          const source = snapshot.metadata.fromCache ? "local cache" : "server";
+          console.log("Data came from " + source);
+          console.log("Data came from " + source);
+          console.log("Data came from " + source);
 
-        // if (user) {
-        //   fetchData(user.uid);
-        // }
-      });
+          fetchAllAnimes(animeIds);
+        }
+      );
       return () => unsubscribe();
     }
   }, [user]);
@@ -124,7 +131,12 @@ function Library({ userProp, loading }: LibraryProps) {
                 <p className="align-self-center weight-regular m-0 col">
                   {anime.data.title}
                 </p>
-                <button className="btn col justify-content-end">Remove</button>
+                <button
+                  className="btn col justify-content-end"
+                  onClick={() => handleDelete(anime.data.mal_id)}
+                >
+                  Remove
+                </button>
               </div>
             );
           })}
@@ -178,6 +190,10 @@ function Library({ userProp, loading }: LibraryProps) {
         // An error happened.
         console.log(error);
       });
+  }
+
+  function handleDelete(anime_id: number) {
+    deleteFromLibrary(anime_id, user.uid);
   }
 }
 

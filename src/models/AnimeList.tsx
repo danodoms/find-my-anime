@@ -9,6 +9,7 @@ import {
   doc,
   arrayUnion,
   onSnapshot,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../firebase"; // Adjust the import path according to your project structure
 
@@ -71,22 +72,23 @@ export const getAnimeListByUserId = async (userId: string) => {
   }
 };
 
-export const listenToAnimeUpdatesByUserId = (
-  userId: string,
-  callback: (animeList: Anime[]) => void
-) => {
-  const q = query(collection(db, "animeList"), where("user_id", "==", userId));
+// export const listenToAnimeUpdatesByUserId = (
+//   userId: string,
+//   callback: (animeList: Anime[]) => void
+// ) => {
+//   const q = query(collection(db, "animeList"), where("user_id", "==", userId));
 
-  const unsubscribe = onSnapshot(q, (querySnapshot) => {
-    const animes: Anime[] = [];
-    querySnapshot.forEach((doc) => {
-      animes.push(doc.data() as Anime);
-    });
-    callback(animes);
-  });
+//   const unsubscribe = onSnapshot(q, (querySnapshot) => {
+//     const animes: Anime[] = [];
+//     querySnapshot.forEach((doc) => {
+//       animes.push(doc.data() as Anime);
+//     });
+//     callback(animes);
+//   });
+//   d;
 
-  return unsubscribe;
-};
+//   return unsubscribe;
+// };
 
 // export const listenToAnimeUpdatesByUserId = (
 //   userId: string,
@@ -109,3 +111,32 @@ export const listenToAnimeUpdatesByUserId = (
 //   // Return the unsubscribe function to allow stopping the listener
 //   return unsubscribe;
 // };
+
+/////////////////////////////////////DELETE FUNCTIONSSSSS///////////////////////////////////
+export const deleteFromLibrary = async (animeId: number, userId: string) => {
+  try {
+    // Reference to the user's document
+    const userDocRef = doc(db, "animeList", userId);
+    // Reference to the animes subcollection under the user document
+    const animesSubcollectionRef = collection(userDocRef, "animes");
+
+    // Query to find the specific anime document by animeId
+    const animeQuery = query(
+      animesSubcollectionRef,
+      where("anime_id", "==", animeId)
+    );
+    const querySnapshot = await getDocs(animeQuery);
+
+    // If the anime exists, delete it
+    if (!querySnapshot.empty) {
+      querySnapshot.forEach(async (document) => {
+        await deleteDoc(doc(animesSubcollectionRef, document.id));
+      });
+      console.log("Anime removed from your library");
+    } else {
+      console.log("Anime not found in your library");
+    }
+  } catch (error) {
+    console.error("Error removing anime from library: ", error);
+  }
+};

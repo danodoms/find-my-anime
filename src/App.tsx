@@ -66,19 +66,17 @@ function App() {
       <div className="row">
         <div className="col p-2">
           <h4 className="m-0 mb-1"> Based on your selection</h4>
+          <Recommendations recommendations={recommendations} />
         </div>
-        <Recommendations recommendations={recommendations} />
-      </div>
 
-      <div className="row ">
-        <div className="col p-2">
+        <div className="col-sm-4 p-2">
           <h4 className="m-0 mb-1"> Library</h4>
+          {user ? (
+            <Library userProp={user} loading={loading} error={error} />
+          ) : (
+            <SignIn />
+          )}
         </div>
-        {user ? (
-          <Library userProp={user} loading={loading} error={error} />
-        ) : (
-          <SignIn />
-        )}
       </div>
 
       <DevSection />
