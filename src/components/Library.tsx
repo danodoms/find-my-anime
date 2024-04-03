@@ -96,8 +96,8 @@ function Library({ userProp, loading }: LibraryProps) {
   }
 
   async function fetchAllAnimes(animeList: []) {
-    const promises = animeList.map((anime_id: number) =>
-      getAnimeDetails(anime_id)
+    const promises = animeList.map((anime: object) =>
+      getAnimeDetails(anime.anime_id)
     );
     const results = await Promise.all(promises);
 

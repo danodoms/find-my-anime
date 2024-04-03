@@ -1,63 +1,50 @@
 import {
   collection,
   addDoc,
+  setDoc,
   getDocs,
   where,
   query,
   updateDoc,
   doc,
   arrayUnion,
+  onSnapshot,
 } from "firebase/firestore";
 import { db } from "../firebase"; // Adjust the import path according to your project structure
 
 /////////////////////////////////////ADD FUNCTIONS
 
 const colRef = collection(db, "animeList");
+
 export const addToLibrary = async (animeId: number, userId: string) => {
-  const userDocId = await getUserDocumentId(userId);
+  try {
+    const userDocRef = doc(db, "animeList", userId);
+    const animesSubcollectionRef = collection(userDocRef, "animes");
 
-  if (userDocId) {
-    await addAnimeToExistingDocument(userDocId, animeId);
-  } else {
-    try {
-      await addDoc(colRef, {
-        anime_ids: [animeId],
-        user_id: userId,
-      });
-      console.log("Anime added to your library");
-    } catch (error) {
-      console.error("Error adding anime to library: ", error);
+    // Add or update the user document in the animeList collection
+    await setDoc(userDocRef, { user_id: userId }, { merge: true });
+
+    // Check if the anime already exists in the user's library
+    const animeQuery = query(
+      animesSubcollectionRef,
+      where("anime_id", "==", animeId)
+    );
+    const animeSnapshot = await getDocs(animeQuery);
+
+    if (!animeSnapshot.empty) {
+      console.log("Anime is already in your library");
+      return;
     }
-  }
-};
 
-const getUserDocumentId = async (userId: string): Promise<string> => {
-  const colRef = collection(db, "animeList");
-  const q = query(colRef, where("user_id", "==", userId));
-  try {
-    const querySnapshot = await getDocs(q);
-    const documentIds = querySnapshot.docs.map((doc) => doc.id); // Extracting document IDs
-    console.log("Document IDs found: ", documentIds);
-    return documentIds[0]; // Returns an array of document IDs
-  } catch (error) {
-    console.error("Error fetching user document: ", error);
-    return ""; // Returns an empty array in case of an error
-  }
-};
-
-const addAnimeToExistingDocument = async (
-  documentId: string,
-  newAnimeId: number
-) => {
-  try {
-    const docRef = doc(db, "animeList", documentId); // Get a reference to the document
-
-    await updateDoc(docRef, {
-      anime_ids: arrayUnion(newAnimeId), // Add the new anime ID to the anime_ids array
+    // If the anime does not exist in the user's library, add it
+    await addDoc(animesSubcollectionRef, {
+      anime_id: animeId,
+      watching: false,
     });
-    console.log("New anime added to the document");
+
+    console.log("Anime added to your library");
   } catch (error) {
-    console.error("Error updating document: ", error);
+    console.error("Error adding anime to library: ", error);
   }
 };
 
@@ -65,29 +52,21 @@ const addAnimeToExistingDocument = async (
 
 export const getAnimeListByUserId = async (userId: string) => {
   try {
-    const colRef = collection(db, "animeList");
-    // Create a query against the collection, filtering by user_id
-    const q = query(colRef, where("user_id", "==", userId));
+    // Get a reference to the user document in the animeList collection
+    const userDocRef = doc(db, "animeList", userId);
+    // Get a reference to the animes subcollection under the user document
+    const animesSubcollectionRef = collection(userDocRef, "animes");
 
-    const querySnapshot = await getDocs(q);
-    const animes: any = [];
+    // Fetch all documents in the animes subcollection
+    const animeSnapshot = await getDocs(animesSubcollectionRef);
 
-    querySnapshot.forEach((doc) => {
-      animes.push({
-        id: doc.id,
-        ...doc.data(),
-      });
-    });
+    // Map each document to its data
+    const animeList = animeSnapshot.docs.map((doc) => doc.data());
 
-    // Assuming each user has only one document, return the anime_ids of the first document
-    if (animes.length > 0) {
-      return animes[0].anime_ids;
-    } else {
-      console.log("No document found for the given userId.");
-      return [];
-    }
+    console.log("Anime list fetched: ", animeList);
+    return animeList;
   } catch (error) {
-    console.error("Failed to fetch user animes:", error);
+    console.error("Error fetching anime list: ", error);
     return [];
   }
 };
