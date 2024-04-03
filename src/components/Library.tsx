@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { signOut } from "firebase/auth";
+import { onSnapshot, collection, doc } from "firebase/firestore";
 
 import { getAnimeListByUserId } from "../models/AnimeList";
 import { Anime } from "../interfaces/jikan";
@@ -23,29 +24,66 @@ function Library({ userProp, loading }: LibraryProps) {
   const [library, setLibrary] = useState<Anime[]>([]);
   // let library = [];
 
-  useEffect(() => {
-    console.log("current user state: ", user);
-    const fetchData = async () => {
-      if (user) {
-        const animeList = await fetchUserAnimes();
-        await fetchAllAnimes(animeList);
-        console.log("fetching anime ids from firestore");
-      }
-    };
+  // const colRef = collection(db, "animeList");
+  const userDocRef = doc(db, "animeList", user.uid);
+  const animesSubcolRef = collection(userDocRef, "animes");
 
-    fetchData();
+  // useEffect(() => {
+  //   console.log("current user state: ", user);
+
+  //   if (user) {
+  //     fetchData(user.uid);
+  //   }
+  // }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      const unsubscribe = onSnapshot(animesSubcolRef, (snapshot) => {
+        console.log("WOWWWWWWWWW YOUR DATABASEEE HASSS EBEEENNN UPPPDATEEEDDD");
+        console.log("snapshot: ", snapshot);
+
+        // Create an array to hold the mal_id values
+        const animeIds = snapshot.docs.map((doc) => doc.data().anime_id);
+        console.log("animeIds: ", animeIds);
+
+        fetchAllAnimes(animeIds);
+
+        // if (user) {
+        //   fetchData(user.uid);
+        // }
+      });
+      return () => unsubscribe();
+    }
   }, [user]);
+
+  async function fetchData(userId: string) {
+    const userAnimes = await getAnimeListByUserId(userId);
+    await fetchAllAnimes(userAnimes);
+  }
+
+  // useEffect(() => {
+  //   console.log("current user state: ", user);
+  //   const fetchData = async () => {
+  //     if (user) {
+  //       const animeList = await fetchUserAnimes();
+  //       await fetchAllAnimes(animeList);
+  //       console.log("fetching anime ids from firestore");
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [user]);
 
   return renderLibrary();
 
-  async function fetchUserAnimes() {
-    if (!user) {
-      console.error("No user logged in");
-      return;
-    }
+  // async function fetchUserAnimes() {
+  //   if (!user) {
+  //     console.error("No user logged in");
+  //     return;
+  //   }
 
-    return getAnimeListByUserId(user.uid);
-  }
+  //   return getAnimeListByUserId(user.uid);
+  // }
 
   function renderLibrary() {
     return (
@@ -95,10 +133,8 @@ function Library({ userProp, loading }: LibraryProps) {
     );
   }
 
-  async function fetchAllAnimes(animeList: []) {
-    const promises = animeList.map((anime: object) =>
-      getAnimeDetails(anime.anime_id)
-    );
+  async function fetchAllAnimes(animeList: any) {
+    const promises = animeList.map((anime: number) => getAnimeDetails(anime));
     const results = await Promise.all(promises);
 
     function isAnime(obj: any): obj is Anime {
