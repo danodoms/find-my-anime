@@ -7,6 +7,7 @@ $darker-primary-color: #8362a3;
 $secondary-color: #e3c6e6;
 $background-color: #1d1d1d;
 $lighter-background-color: #222222;
+$danger-color: #d85f59;
 
 #root,
 html {
@@ -101,6 +102,10 @@ iframe {
   background-color: $primary-color;
 }
 
+.danger-bg {
+  background-color: $danger-color;
+}
+
 .dark-text {
   color: $background-color;
 }
@@ -130,3 +135,26 @@ iframe {
 // .border-c {
 //     border: 1px solid rgb(190, 166, 255);
 // }
+
+// .btn-outline {
+//   background: transparent;
+//   color: $primary-color;
+//   border-radius: 5px;
+//   border: 2px solid $primary-color;
+// }
+
+.btn-outline-primary {
+  color: $primary-color;
+  border-color: $primary-color;
+}
+.btn-outline-primary:hover {
+  color: $background-color;
+  border-color: transparent;
+  background: $primary-color;
+}
+
+.btn-outline-primary:active {
+  color: $background-color;
+  border-color: transparent;
+  background: $primary-color;
+}

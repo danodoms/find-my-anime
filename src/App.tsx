@@ -9,6 +9,7 @@ import { useState } from "react";
 import React from "react";
 import "./App.scss";
 import CoverArt from "./components/CoverArt";
+import Offline from "./components/Offline";
 
 //FIREBASE RELATED IMPORTS
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -50,6 +51,10 @@ function App() {
                 setRecommendations={setRecommendations}
               />
             </ResultsContext.Provider>
+          </div>
+
+          <div className="col mt-2">
+            <Offline />
           </div>
         </div>
 

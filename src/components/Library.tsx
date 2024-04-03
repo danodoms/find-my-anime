@@ -119,7 +119,7 @@ function Library({ userProp, loading }: LibraryProps) {
 
       if (!response.ok) {
         // if HTTP-status is 200-299
-        // throws an Error object with status
+        // throws an Error object with statusbutto
         throw new Error(response.status.toString());
       }
       const data = await response.json();

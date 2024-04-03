@@ -7,7 +7,11 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      devOptions: { enabled: true },
       registerType: "autoUpdate",
+      strategies: "injectManifest",
+      srcDir: "/src/public",
+      filename: "sw.js",
       manifest: {
         name: "Find My Anime",
         short_name: "Find My Anime",

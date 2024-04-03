@@ -16,13 +16,18 @@ function SignIn() {
 
   return (
     <div className="container rounded gx-0 gy-0">
-      <div className="row rounded bg-black">
-        <div className="col p-4">
-          <h4 className="m-0 mb-1"> Sign in to Save Your Anime</h4>
-          <button className="button-primary" onClick={signInWithGoogle}>
-            Sign In
-          </button>
-        </div>
+      <div className="row g-2 flex-wrap rounded bg-black p-4">
+        <h4 className="col flex-wrap align-self-center m-0 p-0">
+          {" "}
+          Sign in to Add Animes to your Library
+        </h4>
+
+        <button
+          className="col-sm-4 flex-wrap btn btn-outline-primary"
+          onClick={signInWithGoogle}
+        >
+          Sign In
+        </button>
       </div>
     </div>
   );

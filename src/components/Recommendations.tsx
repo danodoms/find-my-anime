@@ -1,8 +1,6 @@
 import ReactPlayer from "react-player";
 import { useEffect, useState } from "react";
-import { db, auth } from "../firebase";
-import { collection, getDocs, where, query, addDoc } from "firebase/firestore";
-import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 import { addToLibrary } from "../models/AnimeList";
@@ -12,7 +10,6 @@ function Recommendations({ recommendations = [] }) {
 
   const [trailer, setTrailer] = useState("");
   const [coverArt, setCoverArt] = useState("");
-  // https://www.youtube.com/watch?v=itKPyGXrCVA
   const [playing] = useState(true);
   // const [controls, setControls] = useState(true);
   const [muted, setMuted] = useState(true);
@@ -20,11 +17,9 @@ function Recommendations({ recommendations = [] }) {
 
   const [title, setTitle] = useState("");
   const [animeId, setAnimeId] = useState();
-  // Frieren: Beyond Journey's End
   const [synopsis, setSynopsis] = useState("");
-  ("It follows an elf mage, Frieren, after she and her companions defeat the Demon King and go back to their regular lives. Except Frieren is near-immortal, and the rest of the party is human. She spends the next fifty years off exploring and learning more magic... while her former companions age and approach death.");
 
-  let [index, setIndex] = useState(1);
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
     initializeRecommendations();
@@ -39,7 +34,7 @@ function Recommendations({ recommendations = [] }) {
 
   function renderRecommendations() {
     console.log("index: " + index);
-    if (hasRecommendations()) {
+    if (recommendations.length > 0) {
       return renderRecommendationsWithContent();
     } else {
       return renderNoRecommendations();
@@ -61,14 +56,6 @@ function Recommendations({ recommendations = [] }) {
     );
   }
 
-  function hasRecommendations() {
-    if (recommendations.length > 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   function handleNext() {
     recommendations.map((recommendation: any, id: any) => {
       if (id === index) {
@@ -76,7 +63,7 @@ function Recommendations({ recommendations = [] }) {
         setAnimeDetails(recommendation.entry.mal_id);
       }
     });
-    setIndex((index += 1));
+    setIndex((index) => ++index);
   }
 
   function handlePrevious() {
@@ -86,7 +73,7 @@ function Recommendations({ recommendations = [] }) {
         setAnimeDetails(recommendation.entry.mal_id);
       }
     });
-    setIndex((index -= 1));
+    setIndex((index) => --index);
   }
 
   function handleAddToLibrary() {
@@ -134,9 +121,11 @@ function Recommendations({ recommendations = [] }) {
                   Next
                 </button>
 
-                <button className="btn" onClick={handleAddToLibrary}>
-                  Add to Library
-                </button>
+                {user ? (
+                  <button className="btn" onClick={handleAddToLibrary}>
+                    Add to Library
+                  </button>
+                ) : null}
               </div>
             </div>
           </div>
