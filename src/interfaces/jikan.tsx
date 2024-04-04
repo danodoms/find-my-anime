@@ -1,9 +1,11 @@
 //interface for API endpoint
 
 export interface Anime {
+  watching: boolean;
   data: {
     mal_id: number; // Assuming mal_id should be a number
     url: string;
+
     images: {
       jpg: {
         image_url: string;

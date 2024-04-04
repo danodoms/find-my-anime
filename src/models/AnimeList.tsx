@@ -140,3 +140,38 @@ export const deleteFromLibrary = async (animeId: number, userId: string) => {
     console.error("Error removing anime from library: ", error);
   }
 };
+
+//////////////////////UPDATE FUNCTIONS/////////////////////
+
+export const toggleWatchingStatus = async (userId: string, animeId: number) => {
+  try {
+    // Reference to the user's document
+    const userDocRef = doc(db, "animeList", userId);
+    // Reference to the animes subcollection under the user document
+    const animesSubcollectionRef = collection(userDocRef, "animes");
+
+    // Query to find the specific anime document by animeId
+    const animeQuery = query(
+      animesSubcollectionRef,
+      where("anime_id", "==", animeId)
+    );
+    const querySnapshot = await getDocs(animeQuery);
+
+    if (!querySnapshot.empty) {
+      // Assuming there's only one document for each animeId
+      const animeDocRef = doc(animesSubcollectionRef, querySnapshot.docs[0].id);
+      const currentWatchingStatus = querySnapshot.docs[0].data().watching;
+
+      // Invert the 'watching' status
+      await updateDoc(animeDocRef, {
+        watching: !currentWatchingStatus,
+      });
+
+      console.log("Watching status toggled successfully.");
+    } else {
+      console.log("Anime not found in your library.");
+    }
+  } catch (error) {
+    console.error("Error toggling watching status: ", error);
+  }
+};

@@ -3,7 +3,11 @@ import { auth, db } from "../firebase";
 import { signOut } from "firebase/auth";
 import { onSnapshot, collection, doc } from "firebase/firestore";
 
-import { getAnimeListByUserId, deleteFromLibrary } from "../models/AnimeList";
+import {
+  getAnimeListByUserId,
+  deleteFromLibrary,
+  toggleWatchingStatus,
+} from "../models/AnimeList";
 import { Anime } from "../interfaces/jikan";
 import { User } from "firebase/auth";
 
@@ -22,6 +26,8 @@ interface LibraryProps {
 function Library({ userProp, loading }: LibraryProps) {
   const [user] = useState<User>(userProp);
   const [library, setLibrary] = useState<Anime[]>([]);
+  const [userAnimeList, setUserAnimeList] = useState();
+
   // let library = [];
 
   // const colRef = collection(db, "animeList");
@@ -37,18 +43,21 @@ function Library({ userProp, loading }: LibraryProps) {
   // }, [user]);
 
   useEffect(() => {
+    console.log("library: ", library);
     if (user) {
       const unsubscribe = onSnapshot(
         animesSubcolRef,
         { includeMetadataChanges: true },
         (snapshot) => {
           console.log(
-            "WOWWWWWWWWW YOUR DATABASEEE HASSS EBEEENNN UPPPDATEEEDDD"
+            "WOWWWWWWWWW YOUR DATABASEEE HASSS BEEENNN UPPPDATEEEDDD"
           );
           console.log("snapshot: ", snapshot);
 
           // Create an array to hold the mal_id values
           const animeIds = snapshot.docs.map((doc) => doc.data().anime_id);
+          const userAnimeList = snapshot.docs.map((doc) => doc.data());
+          console.log("userAnimeList: ", userAnimeList);
           console.log("animeIds: ", animeIds);
 
           const source = snapshot.metadata.fromCache ? "local cache" : "server";
@@ -56,7 +65,7 @@ function Library({ userProp, loading }: LibraryProps) {
           console.log("Data came from " + source);
           console.log("Data came from " + source);
 
-          fetchAllAnimes(animeIds);
+          fetchAllAnimes(userAnimeList, animeIds);
         }
       );
       return () => unsubscribe();
@@ -68,29 +77,7 @@ function Library({ userProp, loading }: LibraryProps) {
     await fetchAllAnimes(userAnimes);
   }
 
-  // useEffect(() => {
-  //   console.log("current user state: ", user);
-  //   const fetchData = async () => {
-  //     if (user) {
-  //       const animeList = await fetchUserAnimes();
-  //       await fetchAllAnimes(animeList);
-  //       console.log("fetching anime ids from firestore");
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [user]);
-
   return renderLibrary();
-
-  // async function fetchUserAnimes() {
-  //   if (!user) {
-  //     console.error("No user logged in");
-  //     return;
-  //   }
-
-  //   return getAnimeListByUserId(user.uid);
-  // }
 
   function renderLibrary() {
     return (
@@ -137,6 +124,22 @@ function Library({ userProp, loading }: LibraryProps) {
                 >
                   Remove
                 </button>
+
+                {anime.watching ? (
+                  <button
+                    className="btn col justify-content-end"
+                    onClick={() => handleWatching(anime.data.mal_id)}
+                  >
+                    Watching
+                  </button>
+                ) : (
+                  <button
+                    className="btn col justify-content-end"
+                    onClick={() => handleWatching(anime.data.mal_id)}
+                  >
+                    Not Watching
+                  </button>
+                )}
               </div>
             );
           })}
@@ -145,7 +148,7 @@ function Library({ userProp, loading }: LibraryProps) {
     );
   }
 
-  async function fetchAllAnimes(animeList: any) {
+  async function fetchAllAnimes(userAnimeList: any, animeList: any) {
     const promises = animeList.map((anime: number) => getAnimeDetails(anime));
     const results = await Promise.all(promises);
 
@@ -155,7 +158,13 @@ function Library({ userProp, loading }: LibraryProps) {
 
     const validResults: Anime[] = results.filter(isAnime);
 
-    setLibrary(validResults);
+    const mergedResults = validResults.map((anime, index) => {
+      // Merge the anime object with the corresponding userAnimeList object
+      // Ensure userAnimeList[index] exists to avoid runtime errors
+      return { ...anime, ...(userAnimeList[index] || {}) };
+    });
+
+    setLibrary(mergedResults);
     console.log("library: ", library);
   }
 
@@ -194,6 +203,10 @@ function Library({ userProp, loading }: LibraryProps) {
 
   function handleDelete(anime_id: number) {
     deleteFromLibrary(anime_id, user.uid);
+  }
+
+  function handleWatching(anime_id: number) {
+    toggleWatchingStatus(user.uid, anime_id);
   }
 }
 
