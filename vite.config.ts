@@ -10,8 +10,9 @@ export default defineConfig({
       devOptions: { enabled: true },
       registerType: "autoUpdate",
       strategies: "injectManifest",
-      srcDir: "/src/public",
+      srcDir: "public",
       filename: "sw.js",
+      includeAssets: ["fonts/*.ttf", "images/*.png"],
       manifest: {
         name: "Find My Anime",
         short_name: "Find My Anime",
@@ -19,21 +20,37 @@ export default defineConfig({
         theme_color: "#ffffff",
         icons: [
           {
-            src: "/src/public/icons/icon-512.png",
+            src: "pwa-64x64.png",
+            sizes: "64x64",
+            type: "image/png",
+          },
+          {
+            src: "pwa-192x192.png",
+            sizes: "192x192",
+            type: "image/png",
+          },
+          {
+            src: "pwa-512x512.png",
             sizes: "512x512",
             type: "image/png",
+          },
+          {
+            src: "maskable-icon-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable",
           },
         ],
         screenshots: [
           {
-            src: "/src/public/screenshots/desktop.png",
+            src: "screenshots/desktop.png",
             sizes: "1291x699",
             type: "image/png",
             form_factor: "wide",
             label: "Homescreen of Awesome App",
           },
           {
-            src: "/src/public/screenshots/mobile.png",
+            src: "screenshots/mobile.png",
             sizes: "1082x2402",
             type: "image/png",
             form_factor: "narrow",
@@ -44,4 +61,6 @@ export default defineConfig({
     }),
   ],
   base: "",
+  publicDir: "public",
+  assetsInclude: ["**/*.svg", "**/*.png", "**/*.ico"],
 });
