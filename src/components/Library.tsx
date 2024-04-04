@@ -72,10 +72,10 @@ function Library({ userProp, loading }: LibraryProps) {
     }
   }, [user]);
 
-  async function fetchData(userId: string) {
-    const userAnimes = await getAnimeListByUserId(userId);
-    await fetchAllAnimes(userAnimes);
-  }
+  // async function fetchData(userId: string) {
+  //   const userAnimes = await getAnimeListByUserId(userId);
+  //   await fetchAllAnimes(userAnimes);
+  // }
 
   return renderLibrary();
 
@@ -92,7 +92,7 @@ function Library({ userProp, loading }: LibraryProps) {
             ) : (
               <>
                 <img
-                  className="col-sm-1 circular square-img p-3"
+                  className="col-sm-1 circular square-img w-25 p-3"
                   src={user.photoURL || undefined}
                   alt="user profile picture"
                 />
@@ -111,35 +111,82 @@ function Library({ userProp, loading }: LibraryProps) {
             return (
               <div key={id} className="row rounded p-2 bg-black">
                 <img
-                  className="col-sm-1 rounded p-1"
+                  className="col-sm-1 w-25 rounded p-1"
                   src={anime.data.images.jpg.image_url}
                   alt=""
                 />
                 <p className="align-self-center weight-regular m-0 col">
                   {anime.data.title}
                 </p>
-                <button
-                  className="btn col justify-content-end"
-                  onClick={() => handleDelete(anime.data.mal_id)}
-                >
-                  Remove
-                </button>
 
-                {anime.watching ? (
-                  <button
-                    className="btn col justify-content-end"
-                    onClick={() => handleWatching(anime.data.mal_id)}
+                {/* <div className="col align-self-center m-0 p-0">
+                  <div className="row g-4 ">
+                    {anime.watching ? (
+                      <button
+                        className="btn btn-outline-primary col justify-content-end"
+                        onClick={() => handleWatching(anime.data.mal_id)}
+                      >
+                        Watching
+                      </button>
+                    ) : (
+                      <button
+                        className="btn  col justify-content-end"
+                        onClick={() => handleWatching(anime.data.mal_id)}
+                      >
+                        Not Watching
+                      </button>
+                    )}
+
+                    <button
+                      className=" btn btn-danger col justify-content-end"
+                      onClick={() => handleDelete(anime.data.mal_id)}
+                    >
+                      <img
+                        src="/icons/trash-icon.svg"
+                        className="icon"
+                        alt="Delete"
+                      />
+                    </button>
+                  </div>
+                </div> */}
+
+                <div className="col align-self-center m-0 p-0">
+                  <div
+                    className="btn-group col-12"
+                    role="group"
+                    aria-label="Anime watching options"
                   >
-                    Watching
-                  </button>
-                ) : (
-                  <button
-                    className="btn col justify-content-end"
-                    onClick={() => handleWatching(anime.data.mal_id)}
-                  >
-                    Not Watching
-                  </button>
-                )}
+                    {anime.watching ? (
+                      <button
+                        type="button"
+                        className="btn btn-outline-primary"
+                        onClick={() => handleWatching(anime.data.mal_id)}
+                      >
+                        Watching
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        className="btn "
+                        onClick={() => handleWatching(anime.data.mal_id)}
+                      >
+                        Not Watching
+                      </button>
+                    )}
+
+                    <button
+                      type="button"
+                      className="btn btn-danger"
+                      onClick={() => handleDelete(anime.data.mal_id)}
+                    >
+                      <img
+                        src="/icons/trash-icon.svg"
+                        className="icon-standard-size"
+                        alt="Delete"
+                      />
+                    </button>
+                  </div>
+                </div>
               </div>
             );
           })}
