@@ -1,4 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.min.js";
 import SearchBar from "./components/SearchBar";
 import SearchResults from "./components/SearchResults";
 import DevSection from "./components/DevSection";
@@ -10,6 +11,7 @@ import React from "react";
 import "./App.scss";
 import CoverArt from "./components/CoverArt";
 import Offline from "./components/Offline";
+import NavBar from "./components/NavBar";
 
 //FIREBASE RELATED IMPORTS
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -34,7 +36,8 @@ function App() {
   // console.log("recommendations: " + recommendations);
 
   return (
-    <div className="container gap-4 p-2 background-bg gx-0 gy-0">
+    <div className="container gap-4 p-0d background-bg gx-0 gy-0">
+      <NavBar />
       <div className="row pt-2 gap-4 justify-content-left gx-0">
         <div className="col border">
           <h1 className="display-6 text-icon border m-0 p-0">Find My Anime</h1>
