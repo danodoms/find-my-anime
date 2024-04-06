@@ -1,165 +1,150 @@
-@import url("https://fonts.googleapis.com/css2?family=Bungee&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;600;700;800&display=swap");
+// @import url("https://fonts.googleapis.com/css2?family=Bungee&display=swap");
+// @import url("https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap");
+// @import url("https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;600;700;800&display=swap");
 
-$primary-color: #b78ddf;
-$darker-primary-color: #8362a3;
-$secondary-color: #e3c6e6;
-$background-color: #1d1d1d;
-$lighter-background-color: #222222;
-$danger-color: #d85f59;
+// $primary-color: #b78ddf;
+// $darker-primary-color: #8362a3;
+// $secondary-color: #e3c6e6;
+// $background-color: #1d1d1d;
+// $lighter-background-color: #222222;
+// $danger-color: #d85f59;
 
-#root,
-html {
-  background-color: $background-color;
-}
-
-img {
-  width: 100%;
-  height: auto;
-}
-
-.row {
-  margin-left: 0;
-  margin-right: 0;
-}
-
-.weight-regular {
-  font-weight: 400;
-}
-
-.border {
-  border: 1px solid rgba(255, 255, 255, 0) !important;
-}
-
-input {
-  background-color: transparent !important;
-  color: $primary-color !important;
-  border: 2px solid $primary-color !important;
-}
-
-::placeholder {
-  color: $primary-color !important;
-}
-
-.gradient-overlay {
-  position: absolute;
-  z-index: 10;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgb(0, 0, 0);
-  background: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 0) 100%
-  );
-}
-
-ReactPlayer {
-  z-index: 5;
-}
-
-.border-outline {
-  border: 1.5px solid $primary-color;
-}
-
-iframe {
-  border-radius: 0.4em;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-
-  font-weight: bold;
-  font-family: "Gabarito", sans-serif;
-  color: $primary-color;
-}
-
-.text-icon {
-  font-family: "Silkscreen", sans-serif;
-  font-weight: bold;
-  color: $primary-color;
-}
-
-.title {
-  font-weight: 700;
-}
-
-.backdrop {
-  height: 100vh;
-  width: 100vw;
-}
-
-.background-bg {
-  background-color: $background-color;
-}
-
-.primary-bg {
-  background-color: $primary-color;
-}
-
-.danger-bg {
-  background-color: $danger-color;
-}
-
-.dark-text {
-  color: $background-color;
-}
-.border-a {
-  border: 1px solid rgb(255, 177, 177);
-}
-
-.relative {
-  position: relative;
-}
-
-.react-player {
-}
-
-.circular {
-  border-radius: 50%;
-}
-
-.square-img {
-  object-fit: cover; /* This will ensure the image covers the whole area without distortion */
-}
-
-// .border-b {
-//     border: 1px solid rgb(169, 255, 169);
+// #root,
+// html {
+//   background-color: $background-color;
 // }
 
-// .border-c {
-//     border: 1px solid rgb(190, 166, 255);
+// img {
+//   width: 100%;
+//   height: auto;
 // }
 
-// .btn-outline {
-//   background: transparent;
+// .row {
+//   margin-left: 0;
+//   margin-right: 0;
+// }
+
+// .weight-regular {
+//   font-weight: 400;
+// }
+
+// .border {
+//   border: 1px solid rgba(255, 255, 255, 0) !important;
+// }
+
+// input {
+//   background-color: transparent !important;
+//   color: $primary-color !important;
+//   border: 2px solid $primary-color !important;
+// }
+
+// ::placeholder {
+//   color: $primary-color !important;
+// }
+
+// .gradient-overlay {
+//   position: absolute;
+//   z-index: 10;
+//   top: 0;
+//   left: 0;
+//   width: 100%;
+//   height: 100%;
+//   background: rgb(0, 0, 0);
+//   background: linear-gradient(
+//     90deg,
+//     rgba(0, 0, 0, 1) 0%,
+//     rgba(0, 0, 0, 0) 100%
+//   );
+// }
+
+// ReactPlayer {
+//   z-index: 5;
+// }
+
+// .border-outline {
+//   border: 1.5px solid $primary-color;
+// }
+
+// iframe {
+//   border-radius: 0.4em;
+// }
+
+// * {
+//   margin: 0;
+//   padding: 0;
+//   box-sizing: border-box;
+
+//   font-weight: bold;
+//   font-family: "Gabarito", sans-serif;
 //   color: $primary-color;
-//   border-radius: 5px;
-//   border: 2px solid $primary-color;
 // }
 
-.btn-outline-primary {
-  color: $primary-color;
-  border-color: $primary-color;
-}
-.btn-outline-primary:hover {
-  color: $background-color;
-  border-color: transparent;
-  background: $primary-color;
-}
+// .text-icon {
+//   font-family: "Silkscreen", sans-serif;
+//   font-weight: bold;
+//   color: $primary-color;
+// }
 
-.btn-outline-primary:active {
-  color: $background-color;
-  border-color: transparent;
-  background: $primary-color;
-}
+// .title {
+//   font-weight: 700;
+// }
 
-.icon-standard-size {
-  width: 1.5em; /* Adjust based on your base font size */
-  height: 1.5em;
-}
+// .backdrop {
+//   height: 100vh;
+//   width: 100vw;
+// }
+
+// .background-bg {
+//   background-color: $background-color;
+// }
+
+// .primary-bg {
+//   background-color: $primary-color;
+// }
+
+// .danger-bg {
+//   background-color: $danger-color;
+// }
+
+// .dark-text {
+//   color: $background-color;
+// }
+// .border-a {
+//   border: 1px solid rgb(255, 177, 177);
+// }
+
+// .relative {
+//   position: relative;
+// }
+
+// .react-player {
+// }
+
+// .circular {
+//   border-radius: 50%;
+// }
+
+// .square-img {
+//   object-fit: cover; /* This will ensure the image covers the whole area without distortion */
+// }
+
+// .btn-outline-primary {
+//   color: $primary-color;
+//   border-color: $primary-color;
+// }
+// .btn-outline-primary:hover {
+//   color: $background-color;
+//   border-color: transparent;
+//   background: $primary-color;
+// }
+
+// .btn-outline-primary:active {
+//   color: $background-color;
+//   border-color: transparent;
+//   background: $primary-color;
+// }
+
+// .icon-standard-size {
+//   width: 1.5em;
+//   height: 1.5em;
+// }

@@ -32,16 +32,14 @@ function SearchBar({ setResults }: any) {
   }, 500);
 
   return (
-    <div className="row gx-0 gy-0">
-      <div className="col">
-        <input
-          type="text"
-          className="form-control flex-fill"
-          id="exampleFormControlInput1"
-          placeholder="Search your favorite anime"
-          onChange={(e) => debouncedRequest(e.target.value)}
-        />
-      </div>
+    <div className="form-control flex-auto justify-items-end">
+      <input
+        type="text"
+        className="input input-bordered flex-auto "
+        id="searchBar"
+        placeholder="Search your favorite anime"
+        onChange={(e) => debouncedRequest(e.target.value)}
+      />
     </div>
   );
 }

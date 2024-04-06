@@ -1,5 +1,5 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.min.js";
+// import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/js/bootstrap.min.js";
 import SearchBar from "./components/SearchBar";
 import SearchResults from "./components/SearchResults";
 import DevSection from "./components/DevSection";
@@ -12,10 +12,13 @@ import "./App.scss";
 import CoverArt from "./components/CoverArt";
 import Offline from "./components/Offline";
 import NavBar from "./components/NavBar";
+import Hero from "./components/Hero";
+import BottomNav from "./components/BottomNav";
 
 //FIREBASE RELATED IMPORTS
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase";
+import BottomMenu from "./components/BottomMenu";
 
 export const ResultsContext = React.createContext<[any[], any]>([[], 0]);
 
@@ -36,9 +39,19 @@ function App() {
   // console.log("recommendations: " + recommendations);
 
   return (
-    <div className="container gap-4 p-0d background-bg gx-0 gy-0">
-      <NavBar />
-      <div className="row pt-2 gap-4 justify-content-left gx-0">
+    <div className="">
+      <ResultsContext.Provider value={[results, setResults]}>
+        <NavBar
+          setResults={setResults}
+          results={results}
+          setSelectedAnime={setSelectedAnime}
+          setRecommendations={setRecommendations}
+        />
+      </ResultsContext.Provider>
+
+      <Hero />
+      <div className="divider">Start Here</div>
+      {/* <div className="row pt-2 gap-4 justify-content-left gx-0">
         <div className="col border">
           <h1 className="display-6 text-icon border m-0 p-0">Find My Anime</h1>
           <p className="weight-regular mb-2 p-1">
@@ -82,7 +95,9 @@ function App() {
         </div>
       </div>
 
-      <DevSection />
+      <DevSection /> */}
+      {/* <BottomNav /> */}
+      {/* <BottomMenu /> */}
     </div>
   );
 }
