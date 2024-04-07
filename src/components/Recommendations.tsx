@@ -1,9 +1,10 @@
 import ReactPlayer from "react-player";
-import { useEffect, useState } from "react";
+import { Children, useEffect, useState } from "react";
 import { auth } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 import { addToLibrary } from "../models/AnimeList";
+import Wrapper from "./Wrapper";
 
 function Recommendations({ recommendations = [] }) {
   const [user, loading, error] = useAuthState(auth);
@@ -33,6 +34,7 @@ function Recommendations({ recommendations = [] }) {
   return renderRecommendations();
 
   function renderRecommendations() {
+    console.log("Recommendations: ", recommendations);
     console.log("index: " + index);
     if (recommendations.length > 0) {
       return renderRecommendationsWithContent();
@@ -94,80 +96,176 @@ function Recommendations({ recommendations = [] }) {
 
   function renderRecommendationsWithContent() {
     return (
-      <div className="container rounded gx-0 gy-0">
-        <div className="row rounded bg-black">
-          <div className="col p-4">
-            <h2 className="">{title}</h2>
-            <p className="synopsis weight-regular">{synopsis}</p>
+      <div className="flex flex-wrap container rounded bg-black">
+        <div className="carousel flex-1">
+          {recommendations.map((recommendation: any, id: any) => (
+            <div id={id} className="carousel-item relative w-full bg-black">
+              <div className="p-6">
+                <h1 className="font-bold text-3xl pb-2">
+                  {recommendation.entry.title}
+                </h1>
+                <p className="text-justify">{synopsis}</p>
 
-            <div className="row gap-2">
-              <div className="col gx-0 gy-0">
-                <button
-                  className="btn"
-                  onClick={() => {
-                    setMuted(!muted);
-                  }}
-                >
-                  {muted ? "Unmute" : "Mute"}
-                </button>
+                <div className="flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+                  <a href={`#${--id}`} className="btn btn-circle">
+                    ❮
+                  </a>
+                  <a href={`#${++id}`} className="btn btn-circle">
+                    ❯
+                  </a>
+                </div>
 
-                {index != 0 && (
-                  <button className="btn" onClick={handlePrevious}>
-                    Previous
-                  </button>
-                )}
+                <div className="row gap-2">
+                  <div className="join">
+                    <button
+                      className="btn join-item"
+                      onClick={() => {
+                        setMuted(!muted);
+                      }}
+                    >
+                      {muted ? "Unmute" : "Mute"}
+                    </button>
 
-                <button className="btn" onClick={handleNext}>
-                  Next
-                </button>
+                    {index != 0 && (
+                      <button
+                        className="btn join-item"
+                        onClick={handlePrevious}
+                      >
+                        Previous
+                      </button>
+                    )}
 
-                {user ? (
-                  <button className="btn" onClick={handleAddToLibrary}>
-                    Add to Library
-                  </button>
-                ) : null}
+                    <button className="btn join-item" onClick={handleNext}>
+                      Next
+                    </button>
+
+                    {user ? (
+                      <button
+                        className="btn join-item"
+                        onClick={handleAddToLibrary}
+                      >
+                        Add to Library
+                      </button>
+                    ) : null}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          ))}
+        </div>
 
-          <div className="col-md relative rounded gx-0">
-            <div className="col bg-primary gx-0 gy-0">
-              <div className="rounded gradient-overlay"></div>
+        <div className="flex-1 aspect-video content-center relative pr-1">
+          <div className="col bg-primary gx-0 gy-0">
+            <div className="rounded gradient-overlay"></div>
+          </div>
+          {trailer == "" ? (
+            <div className="flex cover-art-wrapper">
+              <img src={coverArt} alt="" />
             </div>
-
-            {trailer == "" ? (
-              <div className="cover-art-wrapper">
-                <img src={coverArt} alt="" />
-              </div>
-            ) : (
-              <div className="player-wrapper">
-                <ReactPlayer
-                  className="rounded react-player"
-                  style={{ borderRadius: "10px" }}
-                  url={trailer}
-                  playing={playing}
-                  muted={muted} //must be muted to enable autoplay feature (not in all cases)
-                  controls={false}
-                  width="100%"
-                  // height="100%"
-                  loop
-                  onReady={() => {}}
-                  onStart={() => {
-                    setMuted(false);
-                    // @ts-ignore
-                    this.player.volume = 0.8; // fade volume up over 0.5 seconds
-                    // @ts-ignore
-                    this.player.fadeIn(0.5);
-                    //@ts-ignore
-                    this.player.seekTo(30);
-                  }}
-                />
-              </div>
-            )}
-          </div>
+          ) : (
+            <div className="flex player-wrapper aspect-video self-center">
+              <ReactPlayer
+                className="rounded react-player aspect-video"
+                style={{ borderRadius: "10px" }}
+                url={trailer}
+                playing={playing}
+                muted={muted} //must be muted to enable autoplay feature (not in all cases)
+                controls={false}
+                width="100%"
+                // height="100%"
+                loop
+                onReady={() => {}}
+                onStart={() => {
+                  setMuted(false);
+                  // @ts-ignore
+                  this.player.volume = 0.8; // fade volume up over 0.5 seconds
+                  // @ts-ignore
+                  this.player.fadeIn(0.5);
+                  //@ts-ignore
+                  this.player.seekTo(30);
+                }}
+              />
+            </div>
+          )}
         </div>
       </div>
     );
+
+    // return (
+    //   <div className="container rounded gx-0 gy-0">
+    //     <div className="row rounded bg-black">
+    //       <div className="col p-4">
+    //         <h2 className="">{title}</h2>
+    //         <p className="synopsis weight-regular">{synopsis}</p>
+
+    //         <div className="row gap-2">
+    //           <div className="col gx-0 gy-0">
+    //             <button
+    //               className="btn"
+    //               onClick={() => {
+    //                 setMuted(!muted);
+    //               }}
+    //             >
+    //               {muted ? "Unmute" : "Mute"}
+    //             </button>
+
+    //             {index != 0 && (
+    //               <button className="btn" onClick={handlePrevious}>
+    //                 Previous
+    //               </button>
+    //             )}
+
+    //             <button className="btn" onClick={handleNext}>
+    //               Next
+    //             </button>
+
+    //             {user ? (
+    //               <button className="btn" onClick={handleAddToLibrary}>
+    //                 Add to Library
+    //               </button>
+    //             ) : null}
+    //           </div>
+    //         </div>
+    //       </div>
+
+    //       <div className="col-md relative rounded gx-0">
+    //         <div className="col bg-primary gx-0 gy-0">
+    //           <div className="rounded gradient-overlay"></div>
+    //         </div>
+
+    //         {trailer == "" ? (
+    //           <div className="cover-art-wrapper">
+    //             <img src={coverArt} alt="" />
+    //           </div>
+    //         ) : (
+    //           <div className="player-wrapper">
+    //             <ReactPlayer
+    //               className="rounded react-player"
+    //               style={{ borderRadius: "10px" }}
+    //               url={trailer}
+    //               playing={playing}
+    //               muted={muted} //must be muted to enable autoplay feature (not in all cases)
+    //               controls={false}
+    //               width="100%"
+    //               // height="100%"
+    //               loop
+    //               onReady={() => {}}
+    //               onStart={() => {
+    //                 setMuted(false);
+    //                 // @ts-ignore
+    //                 this.player.volume = 0.8; // fade volume up over 0.5 seconds
+    //                 // @ts-ignore
+    //                 this.player.fadeIn(0.5);
+    //                 //@ts-ignore
+    //                 this.player.seekTo(30);
+    //               }}
+    //             />
+    //           </div>
+    //         )}
+    //       </div>
+    //     </div>
+    //   </div>
+    // );
   }
 
   async function setAnimeDetails(anime_id: number): Promise<any> {

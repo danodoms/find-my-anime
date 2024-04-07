@@ -14,6 +14,7 @@ import Offline from "./components/Offline";
 import NavBar from "./components/NavBar";
 import Hero from "./components/Hero";
 import BottomNav from "./components/BottomNav";
+import Wrapper from "./components/Wrapper";
 
 //FIREBASE RELATED IMPORTS
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -48,8 +49,16 @@ function App() {
           setRecommendations={setRecommendations}
         />
       </ResultsContext.Provider>
+      {/* <Wrapper> */}
+      <div className="flex flex-wrap p-4 gap-4 rounded">
+        <CoverArt title={selectedAnime.title} image={selectedAnime.image} />
+        <Recommendations recommendations={recommendations} />
+      </div>
+
+      {/* </Wrapper> */}
 
       <Hero />
+
       <div className="divider">Start Here</div>
       {/* <div className="row pt-2 gap-4 justify-content-left gx-0">
         <div className="col border">
