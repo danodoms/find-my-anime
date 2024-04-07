@@ -11,27 +11,27 @@ import {
 import { Anime } from "../interfaces/jikan";
 import { User } from "firebase/auth";
 
-// interface AuthUser {
-//   photoURL: string;
-//   uid: string;
-//   displayName: string;
-// }
-
-interface LibraryProps {
-  userProp: User;
-  loading: boolean;
-  error?: Error; // Optional, assuming error might not always be provided
+interface AuthUser {
+  photoURL: string;
+  uid: string;
+  displayName: string;
 }
 
-function Library({ userProp, loading }: LibraryProps) {
-  const [user] = useState<User>(userProp);
+interface LibraryProps {
+  user: AuthUser;
+  loading: boolean;
+  error?: Error;
+}
+
+function UserLibrary({ user, loading }: LibraryProps) {
+  // const [user] = useState<AuthUser>(userProp);
   const [library, setLibrary] = useState<Anime[]>([]);
   const [userAnimeList, setUserAnimeList] = useState();
 
   // let library = [];
 
   // const colRef = collection(db, "animeList");
-  const userDocRef = doc(db, "animeList", user.uid);
+  const userDocRef = doc(db, "animeList", user?.uid);
   const animesSubcolRef = collection(userDocRef, "animes");
 
   // useEffect(() => {
@@ -81,9 +81,9 @@ function Library({ userProp, loading }: LibraryProps) {
 
   function renderLibrary() {
     return (
-      <div className="container rounded gx-0 gy-0">
-        <div className="row rounded bg-black">
-          <div className="row p-0 primary-bg rounded">
+      <div className="flex-auto container rounded p-4">
+        <div className="flex flex-col rounded gap-4">
+          <div className="flex justify-end items-center rounded gap-4">
             {loading ? (
               <>
                 <h4 className="m-0 mb-1 col">Sign in</h4>
@@ -91,17 +91,15 @@ function Library({ userProp, loading }: LibraryProps) {
               </>
             ) : (
               <>
-                <img
-                  className="col-sm-1 circular square-img w-25 p-3"
-                  src={user.photoURL || undefined}
-                  alt="user profile picture"
-                />
-                <h5 className="m-0 dark-text col align-self-center">
-                  Signed in as {user?.displayName}
-                </h5>
-                <button className="btn col-4 " onClick={handleSignOut}>
+                <button className="btn mr-auto " onClick={handleSignOut}>
                   Sign out
                 </button>
+                <h5 className="">Signed in as {user?.displayName}</h5>
+                <img
+                  className="flex-none rounded-full w-20 "
+                  src={user?.photoURL || undefined}
+                  alt="user profile picture"
+                />
               </>
             )}
           </div>
@@ -109,57 +107,30 @@ function Library({ userProp, loading }: LibraryProps) {
           {library.map((anime: Anime, id: number) => {
             console.log("title: ", anime.data.title);
             return (
-              <div key={id} className="row rounded p-2 bg-black">
+              <div
+                key={id}
+                className="flex flex-auto rounded-lg p-2 bg-black gap-2 "
+              >
                 <img
-                  className="col-sm-1 w-25 rounded p-1"
+                  className="flex w-20 rounded p-1"
                   src={anime.data.images.jpg.image_url}
                   alt=""
                 />
-                <p className="align-self-center weight-regular m-0 col">
-                  {anime.data.title}
-                </p>
 
-                {/* <div className="col align-self-center m-0 p-0">
-                  <div className="row g-4 ">
-                    {anime.watching ? (
-                      <button
-                        className="btn btn-outline-primary col justify-content-end"
-                        onClick={() => handleWatching(anime.data.mal_id)}
-                      >
-                        Watching
-                      </button>
-                    ) : (
-                      <button
-                        className="btn  col justify-content-end"
-                        onClick={() => handleWatching(anime.data.mal_id)}
-                      >
-                        Not Watching
-                      </button>
-                    )}
+                <div className="flex flex-col">
+                  <h2 className="flex-auto font-bold text-xl justify-end self-start  text-pretty">
+                    {anime.data.title}
+                  </h2>
 
-                    <button
-                      className=" btn btn-danger col justify-content-end"
-                      onClick={() => handleDelete(anime.data.mal_id)}
-                    >
-                      <img
-                        src="/icons/trash-icon.svg"
-                        className="icon"
-                        alt="Delete"
-                      />
-                    </button>
-                  </div>
-                </div> */}
-
-                <div className="col align-self-center m-0 p-0">
                   <div
-                    className="btn-group col-12"
+                    className="flex self-center join lg:join-horizontal"
                     role="group"
                     aria-label="Anime watching options"
                   >
                     {anime.watching ? (
                       <button
                         type="button"
-                        className="btn btn-outline-primary"
+                        className="btn join-item"
                         onClick={() => handleWatching(anime.data.mal_id)}
                       >
                         Watching
@@ -167,7 +138,7 @@ function Library({ userProp, loading }: LibraryProps) {
                     ) : (
                       <button
                         type="button"
-                        className="btn "
+                        className="btn join-item"
                         onClick={() => handleWatching(anime.data.mal_id)}
                       >
                         Not Watching
@@ -176,14 +147,15 @@ function Library({ userProp, loading }: LibraryProps) {
 
                     <button
                       type="button"
-                      className="btn btn-danger"
+                      className="btn btn-error join-item"
                       onClick={() => handleDelete(anime.data.mal_id)}
                     >
-                      <img
-                        src="/icons/trash-icon.svg"
-                        className="icon-standard-size"
-                        alt="Delete"
-                      />
+                      {/* <img
+                      src="/icons/trash-icon.svg"
+                      className="h-6 w-6"
+                      alt="Delete"
+                    /> */}
+                      Remove
                     </button>
                   </div>
                 </div>
@@ -257,4 +229,4 @@ function Library({ userProp, loading }: LibraryProps) {
   }
 }
 
-export default Library;
+export default UserLibrary;

@@ -46,6 +46,7 @@ function NavBar({
           setSelectedAnime={setSelectedAnime}
           setRecommendations={setRecommendations}
         />
+
         <SignIn user={user} />
       </div>
     </div>
