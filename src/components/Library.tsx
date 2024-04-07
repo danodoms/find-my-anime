@@ -38,7 +38,7 @@ function Library({ userProp, loading }: LibraryProps) {
   //   console.log("current user state: ", user);
 
   //   if (user) {
-  //     fetchData(user.uid);
+  //     fetchData(user.uid);return
   //   }
   // }, [user]);
 

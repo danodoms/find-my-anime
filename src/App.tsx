@@ -47,10 +47,11 @@ function App() {
           results={results}
           setSelectedAnime={setSelectedAnime}
           setRecommendations={setRecommendations}
+          user={user}
         />
       </ResultsContext.Provider>
       {/* <Wrapper> */}
-      <div className="flex flex-wrap p-4 gap-4 rounded">
+      <div className="flex flex-wrap p-4 gap-4">
         <CoverArt title={selectedAnime.title} image={selectedAnime.image} />
         <Recommendations recommendations={recommendations} />
       </div>

@@ -98,63 +98,60 @@ function Recommendations({ recommendations = [] }) {
     return (
       <div className="flex flex-wrap container rounded bg-black">
         <div className="carousel flex-1">
-          {recommendations.map((recommendation: any, id: any) => (
-            <div id={id} className="carousel-item relative w-full bg-black">
-              <div className="p-6">
+          {recommendations.map((recommendation: any, id: number) => (
+            <div
+              id={id.toString()}
+              className="carousel-item relative w-full bg-black"
+            >
+              <div className="flex flex-col p-6">
                 <h1 className="font-bold text-3xl pb-2">
                   {recommendation.entry.title}
                 </h1>
                 <p className="text-justify">{synopsis}</p>
 
-                <div className="flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                  <a href={`#${--id}`} className="btn btn-circle">
-                    ❮
-                  </a>
-                  <a href={`#${++id}`} className="btn btn-circle">
-                    ❯
-                  </a>
-                </div>
+                <div className="join flex mt-auto">
+                  <button
+                    className="btn join-item"
+                    onClick={() => {
+                      setMuted(!muted);
+                    }}
+                  >
+                    {muted ? "Unmute" : "Mute"}
+                  </button>
 
-                <div className="row gap-2">
-                  <div className="join">
+                  {index != 0 && (
+                    <a
+                      href={`#${id - 1}`}
+                      className="btn join-item"
+                      // onClick={handlePrevious}
+                    >
+                      Previous
+                    </a>
+                  )}
+
+                  <a
+                    href={`#${id + 1}`}
+                    className="btn join-item"
+                    // onClick={handleNext}
+                  >
+                    Next
+                  </a>
+
+                  {user ? (
                     <button
                       className="btn join-item"
-                      onClick={() => {
-                        setMuted(!muted);
-                      }}
+                      onClick={handleAddToLibrary}
                     >
-                      {muted ? "Unmute" : "Mute"}
+                      Add to Library
                     </button>
-
-                    {index != 0 && (
-                      <button
-                        className="btn join-item"
-                        onClick={handlePrevious}
-                      >
-                        Previous
-                      </button>
-                    )}
-
-                    <button className="btn join-item" onClick={handleNext}>
-                      Next
-                    </button>
-
-                    {user ? (
-                      <button
-                        className="btn join-item"
-                        onClick={handleAddToLibrary}
-                      >
-                        Add to Library
-                      </button>
-                    ) : null}
-                  </div>
+                  ) : null}
                 </div>
               </div>
             </div>
           ))}
         </div>
 
-        <div className="flex-1 aspect-video content-center relative pr-1">
+        <div className="container flex-1 aspect-video content-center relative">
           <div className="col bg-primary gx-0 gy-0">
             <div className="rounded gradient-overlay"></div>
           </div>
