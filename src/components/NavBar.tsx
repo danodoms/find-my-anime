@@ -9,9 +9,16 @@ function NavBar({
   user,
 }: any) {
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-base-100 gap-2">
       <div className="flex-initial">
-        <a className="btn btn-ghost text-xl">find my anime.</a>
+        <a
+          className="btn skeleton btn-ghost text-base text-left leading-4"
+          href="/"
+        >
+          find my
+          <br />
+          anime.
+        </a>
         {/* <label className="swap swap-rotate">
           
           <input
@@ -39,7 +46,7 @@ function NavBar({
           </svg>
         </label> */}
       </div>
-      <div className="flex-auto gap-2">
+      <div className="flex-auto gap-2 ">
         <SearchResults
           setResults={setResults}
           results={results}

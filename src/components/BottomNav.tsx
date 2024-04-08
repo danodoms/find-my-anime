@@ -1,7 +1,9 @@
 import { NavLink } from "react-router-dom";
+import React, { useState } from "react";
+
 function BottomNav() {
   return (
-    <div className="btm-nav">
+    <div className="btm-nav z-10">
       <NavLink to="/" className={({ isActive }) => (isActive ? "active" : "")}>
         <svg
           xmlns="http://www.w3.org/2000/svg"

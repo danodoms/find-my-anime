@@ -43,6 +43,13 @@ function App() {
     <div className="">
       <ResultsContext.Provider value={[results, setResults]}>
         <BrowserRouter>
+          <NavBar
+            setResults={setResults}
+            results={results}
+            setSelectedAnime={setSelectedAnime}
+            setRecommendations={setRecommendations}
+            user={user}
+          />
           <Routes>
             <Route
               path="/library"

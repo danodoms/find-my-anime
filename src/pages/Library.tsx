@@ -15,11 +15,9 @@ interface LibraryProps {
 function Library({ user, loading }: LibraryProps) {
   return (
     <div>
-      <div className="flex flex-wrap p-4 gap-4">
-        <UserLibrary user={user} loading={loading} />
+      <div className="flex flex-wrap p-2 gap-4">
+        <UserLibrary userProp={user} loading={loading} />
       </div>
-
-      <BottomNav />
     </div>
   );
 }

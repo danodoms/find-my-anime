@@ -81,26 +81,17 @@ function UserLibrary({ user, loading }: LibraryProps) {
 
   function renderLibrary() {
     return (
-      <div className="flex-auto container rounded p-4">
-        <div className="flex flex-col rounded gap-4">
-          <div className="flex justify-end items-center rounded gap-4">
-            {loading ? (
-              <>
-                <h4 className="m-0 mb-1 col">Sign in</h4>
-                <button className="btn">Sign in</button>
-              </>
+      <div className="flex flex-auto rounded p-4">
+        <div className="flex flex-wrap rounded content-around gap-4">
+          <div className="flex flex-auto justify-center items-center rounded gap-4">
+            {user ? (
+              <h1 className="flex-auto text-3xl font-bold m-0 p-0">
+                Your Library
+              </h1>
             ) : (
-              <>
-                <button className="btn mr-auto " onClick={handleSignOut}>
-                  Sign out
-                </button>
-                <h5 className="">Signed in as {user?.displayName}</h5>
-                <img
-                  className="flex-none rounded-full w-20 "
-                  src={user?.photoURL || undefined}
-                  alt="user profile picture"
-                />
-              </>
+              <h1 className="flex-auto text-3xl font-bold m-0 p-0">
+                Sign In to Add Animes to Your Library
+              </h1>
             )}
           </div>
 
@@ -112,25 +103,25 @@ function UserLibrary({ user, loading }: LibraryProps) {
                 className="flex flex-auto rounded-lg p-2 bg-black gap-2 "
               >
                 <img
-                  className="flex w-20 rounded p-1"
+                  className="flex w-20 rounded-lg p-1"
                   src={anime.data.images.jpg.image_url}
                   alt=""
                 />
 
-                <div className="flex flex-col">
-                  <h2 className="flex-auto font-bold text-xl justify-end self-start  text-pretty">
+                <div className="flex flex-col flex-auto justify-evenly">
+                  <h2 className="flex-auto font-bold text-xl self-start  text-pretty">
                     {anime.data.title}
                   </h2>
 
                   <div
-                    className="flex self-center join lg:join-horizontal"
+                    className="flex-auto self-start join lg:join-horizontal"
                     role="group"
                     aria-label="Anime watching options"
                   >
                     {anime.watching ? (
                       <button
                         type="button"
-                        className="btn join-item"
+                        className="btn flex-auto join-item"
                         onClick={() => handleWatching(anime.data.mal_id)}
                       >
                         Watching
@@ -138,7 +129,7 @@ function UserLibrary({ user, loading }: LibraryProps) {
                     ) : (
                       <button
                         type="button"
-                        className="btn join-item"
+                        className="btn flex-auto btn-outline join-item"
                         onClick={() => handleWatching(anime.data.mal_id)}
                       >
                         Not Watching
@@ -147,15 +138,14 @@ function UserLibrary({ user, loading }: LibraryProps) {
 
                     <button
                       type="button"
-                      className="btn btn-error join-item"
+                      className="btn flex-auto btn-error join-item"
                       onClick={() => handleDelete(anime.data.mal_id)}
                     >
-                      {/* <img
-                      src="/icons/trash-icon.svg"
-                      className="h-6 w-6"
-                      alt="Delete"
-                    /> */}
-                      Remove
+                      <img
+                        src="/icons/trash-icon.svg"
+                        className="h-6 w-6"
+                        alt="Delete"
+                      />
                     </button>
                   </div>
                 </div>

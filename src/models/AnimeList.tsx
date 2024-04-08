@@ -17,7 +17,10 @@ import { db } from "../firebase"; // Adjust the import path according to your pr
 
 const colRef = collection(db, "animeList");
 
-export const addToLibrary = async (animeId: number, userId: string) => {
+export const addToLibrary = async (
+  animeId: number,
+  userId: string
+): Promise<string> => {
   try {
     const userDocRef = doc(db, "animeList", userId);
     const animesSubcollectionRef = collection(userDocRef, "animes");
@@ -34,7 +37,7 @@ export const addToLibrary = async (animeId: number, userId: string) => {
 
     if (!animeSnapshot.empty) {
       console.log("Anime is already in your library");
-      return;
+      return "already added";
     }
 
     // If the anime does not exist in the user's library, add it
@@ -44,8 +47,10 @@ export const addToLibrary = async (animeId: number, userId: string) => {
     });
 
     console.log("Anime added to your library");
+    return "success";
   } catch (error) {
     console.error("Error adding anime to library: ", error);
+    return "error";
   }
 };
 

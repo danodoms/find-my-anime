@@ -29,18 +29,9 @@ function SignIn({ user }: any) {
 
   function Login() {
     return (
-      <div tabIndex={0} role="button" className="btn">
-        {/* <div className="w-10 rounded-full">
-          <img
-            alt="Tailwind CSS Navbar component"
-            // src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-            src="../public/icons/user.svg"
-          />
-        </div> */}
-        <button className="btn text-base" onClick={signInWithGoogle}>
-          Log in
-        </button>
-      </div>
+      <button className="btn text-base" onClick={signInWithGoogle}>
+        Sign in
+      </button>
     );
   }
 
@@ -48,7 +39,7 @@ function SignIn({ user }: any) {
     return (
       <div className="dropdown dropdown-end">
         <div className="flex gap-2">
-          {/* <p className="self-center text-base">{user.displayName}</p> */}
+          {/* <p className=" self-center text-base">{user.displayName}</p> */}
           <div
             tabIndex={0}
             role="button"

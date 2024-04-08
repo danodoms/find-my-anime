@@ -17,22 +17,23 @@ function Home({
 }: any) {
   return (
     <div>
-      <NavBar
+      {/* <NavBar
         setResults={setResults}
         results={results}
         setSelectedAnime={setSelectedAnime}
         setRecommendations={setRecommendations}
         user={user}
-      />
+      /> */}
+      {selectedAnime.title == "" ? (
+        <Hero />
+      ) : (
+        <div className="flex flex-wrap p-2 gap-4 ">
+          <CoverArt title={selectedAnime.title} image={selectedAnime.image} />
+          <Recommendations recommendations={recommendations} />
+        </div>
+      )}
 
-      <div className="flex flex-wrap p-4 gap-4">
-        <CoverArt title={selectedAnime.title} image={selectedAnime.image} />
-        <Recommendations recommendations={recommendations} />
-      </div>
-
-      <Hero />
-
-      <div className="divider">Start Here</div>
+      {/* <div className="divider">Start Here</div> */}
 
       {/* <BottomNav /> */}
     </div>

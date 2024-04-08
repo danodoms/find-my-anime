@@ -2,9 +2,11 @@ import ReactPlayer from "react-player";
 import { Children, useEffect, useState } from "react";
 import { auth } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-
 import { addToLibrary } from "../models/AnimeList";
+import { startWindToast } from "@mariojgt/wind-notify/packages/index.js";
 import Wrapper from "./Wrapper";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Recommendations({ recommendations = [] }) {
   const [user, loading, error] = useAuthState(auth);
@@ -78,9 +80,26 @@ function Recommendations({ recommendations = [] }) {
     setIndex((index) => --index);
   }
 
-  function handleAddToLibrary() {
+  async function handleAddToLibrary() {
     if (user?.uid && animeId) {
-      addToLibrary(animeId, user.uid);
+      const response = await addToLibrary(animeId, user.uid);
+
+      if (response == "success") {
+        // startWindToast("Library", "Added to Library", "success", 3, "top");
+        toast.success("Added to Library", { position: "top-center" });
+      } else if (response == "already added") {
+        // startWindToast(
+        //   "Library",
+        //   "Already in your Library",
+        //   "warning",
+        //   3,
+        //   "top"
+        // );
+        toast.warn("Already in your Library", { position: "top-center" });
+      } else if (response == "error") {
+        // startWindToast("Library", "Error adding to Library", "error", 3, "top");
+        toast.error("Error adding to Library", { position: "top-center" });
+      }
     }
   }
 
@@ -97,7 +116,7 @@ function Recommendations({ recommendations = [] }) {
   function renderRecommendationsWithContent() {
     return (
       <div className="flex flex-wrap container rounded bg-black">
-        <div className="carousel flex-1 ">
+        <div className="carousel md:w-1/2 rounded-xl flex-auto ">
           {recommendations.map((recommendation: any, id: number) => (
             <div
               id={id.toString()}
@@ -105,11 +124,12 @@ function Recommendations({ recommendations = [] }) {
             >
               <div className="flex flex-col p-6">
                 <h1 className="font-bold text-3xl pb-2">
-                  {recommendation.entry.title}
+                  {/* {recommendation.entry.title} */}
+                  {title}
                 </h1>
                 <p className="text-justify">{synopsis}</p>
 
-                <div className="join flex mt-auto">
+                <div className="join flex flex-auto mt-auto pt-2">
                   <button
                     className="btn join-item"
                     onClick={() => {
@@ -121,18 +141,18 @@ function Recommendations({ recommendations = [] }) {
 
                   {index != 0 && (
                     <a
-                      href={`#${id - 1}`}
+                      // href={`#${id - 1}`}
                       className="btn join-item"
-                      // onClick={handlePrevious}
+                      onClick={handlePrevious}
                     >
                       Previous
                     </a>
                   )}
 
                   <a
-                    href={`#${id + 1}`}
+                    // href={`#${id + 1}`}
                     className="btn join-item"
-                    // onClick={handleNext}
+                    onClick={handleNext}
                   >
                     Next
                   </a>
@@ -164,9 +184,8 @@ function Recommendations({ recommendations = [] }) {
             </div>
           ))}
         </div>
-
-        <div className="container flex-1 aspect-video content-center relative">
-          <div className="col bg-primary gx-0 gy-0">
+        <div className="container md:w-1/2 sm:w-1/4 flex-1 aspect-video content-center relative">
+          <div className="">
             <div className="rounded gradient-overlay"></div>
           </div>
           {trailer == "" ? (
@@ -199,6 +218,7 @@ function Recommendations({ recommendations = [] }) {
             </div>
           )}
         </div>
+        <ToastContainer />
       </div>
     );
 
