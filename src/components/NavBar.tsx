@@ -9,17 +9,24 @@ function NavBar({
   user,
 }: any) {
   return (
-    <div className="navbar bg-base-100 gap-2">
-      <div className="flex-initial">
-        <a
-          className="btn skeleton btn-ghost text-base text-left leading-4"
-          href="/"
-        >
-          find my
-          <br />
-          anime.
-        </a>
-        {/* <label className="swap swap-rotate">
+    <div className="flex flex-col z-10 absolute w-full">
+      {!navigator.onLine ? (
+        <div className=" py-1 bg-red-500 flex-auto opacity-70 text-center text-gray-800 font-normal">
+          You're offline, some functionality may not work
+        </div>
+      ) : null}
+
+      <div className="flex-auto navbar bg-base-100 gap-2">
+        <div className="flex">
+          <a
+            className="btn skeleton px-3 btn-ghost text-base text-left leading-4 rounded-lg"
+            href="/"
+          >
+            find my
+            <br />
+            anime.
+          </a>
+          {/* <label className="swap swap-rotate">
           
           <input
             type="checkbox"
@@ -45,15 +52,15 @@ function NavBar({
             <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
           </svg>
         </label> */}
-      </div>
-      <div className="flex-auto gap-2 ">
-        <SearchResults
-          setResults={setResults}
-          results={results}
-          setSelectedAnime={setSelectedAnime}
-          setRecommendations={setRecommendations}
-        />
-
+        </div>
+        <div className="flex flex-auto gap-2 ">
+          <SearchResults
+            setResults={setResults}
+            results={results}
+            setSelectedAnime={setSelectedAnime}
+            setRecommendations={setRecommendations}
+          />
+        </div>
         <SignIn user={user} />
       </div>
     </div>

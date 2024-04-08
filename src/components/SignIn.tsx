@@ -29,7 +29,7 @@ function SignIn({ user }: any) {
 
   function Login() {
     return (
-      <button className="btn text-base" onClick={signInWithGoogle}>
+      <button className=" flex-auto btn text-base" onClick={signInWithGoogle}>
         Sign in
       </button>
     );

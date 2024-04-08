@@ -43,35 +43,40 @@ function App() {
     <div className="">
       <ResultsContext.Provider value={[results, setResults]}>
         <BrowserRouter>
-          <NavBar
-            setResults={setResults}
-            results={results}
-            setSelectedAnime={setSelectedAnime}
-            setRecommendations={setRecommendations}
-            user={user}
-          />
-          <Routes>
-            <Route
-              path="/library"
-              element={user ? <Library user={user} loading={loading} /> : null}
+          <div className="flex flex-col flex-wrap bg-base-200 justify-start">
+            <NavBar
+              setResults={setResults}
+              results={results}
+              setSelectedAnime={setSelectedAnime}
+              setRecommendations={setRecommendations}
+              user={user}
             />
+            <Routes>
+              <Route
+                path="/library"
+                element={
+                  //@ts-ignore
+                  user ? <Library user={user} loading={loading} /> : null
+                }
+              />
 
-            <Route
-              index
-              element={
-                <Home
-                  results={results}
-                  setResults={setResults}
-                  selectedAnime={selectedAnime}
-                  setSelectedAnime={setSelectedAnime}
-                  setRecommendations={setRecommendations}
-                  user={user}
-                  recommendations={recommendations}
-                />
-              }
-            />
-          </Routes>
-          <BottomNav />
+              <Route
+                index
+                element={
+                  <Home
+                    results={results}
+                    setResults={setResults}
+                    selectedAnime={selectedAnime}
+                    setSelectedAnime={setSelectedAnime}
+                    setRecommendations={setRecommendations}
+                    user={user}
+                    recommendations={recommendations}
+                  />
+                }
+              />
+            </Routes>
+            <BottomNav />
+          </div>
         </BrowserRouter>
       </ResultsContext.Provider>
     </div>

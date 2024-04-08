@@ -3,13 +3,13 @@ import Wrapper from "./Wrapper";
 
 function CoverArt({ title, image }: any) {
   return (
-    <div className="card-bordered flex rounded-xl bg-black bg-base-100 shadow-xl">
-      <figure className="flex-1">
-        <img src={image} alt="coverArt" className="rounded-xl p-2" />
+    <div className=" card-bordered flex flex-auto rounded-xl bg-black hadow-xl">
+      <figure className="flex-none">
+        <img src={image} alt="coverArt" className="rounded-xl p-2 w-20" />
       </figure>
-      <div className="card-body p-6">
-        <h1 className="">Your Selection</h1>
-        <h2 className="card-title text-pretty">{title}</h2>
+      <div className="card-body justify-center p-6 gap-0">
+        <h1 className="text-sm">Your Selection</h1>
+        <h2 className="card-title text-pretty text-2xl">{title}</h2>
       </div>
     </div>
   );

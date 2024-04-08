@@ -3,7 +3,6 @@ import { Children, useEffect, useState } from "react";
 import { auth } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { addToLibrary } from "../models/AnimeList";
-import { startWindToast } from "@mariojgt/wind-notify/packages/index.js";
 import Wrapper from "./Wrapper";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -115,28 +114,40 @@ function Recommendations({ recommendations = [] }) {
 
   function renderRecommendationsWithContent() {
     return (
-      <div className="flex flex-wrap container rounded bg-black">
+      <div className="flex flex-wrap flex-auto w-full rounded bg-black">
         <div className="carousel md:w-1/2 rounded-xl flex-auto ">
-          {recommendations.map((recommendation: any, id: number) => (
+          {recommendations.map((id: number) => (
             <div
               id={id.toString()}
               className="carousel-item relative w-full bg-black"
             >
-              <div className="flex flex-col p-6">
+              <div className="flex flex-col p-6 ">
                 <h1 className="font-bold text-3xl pb-2">
                   {/* {recommendation.entry.title} */}
                   {title}
                 </h1>
-                <p className="text-justify">{synopsis}</p>
+                <p className="text-justify sm:text-sm">{synopsis}</p>
 
-                <div className="join flex flex-auto mt-auto pt-2">
+                <div className="join flex flex-auto mt-auto pt-2 ">
                   <button
                     className="btn join-item"
                     onClick={() => {
                       setMuted(!muted);
                     }}
                   >
-                    {muted ? "Unmute" : "Mute"}
+                    {muted ? (
+                      <img
+                        src="../public/icons/mute.svg"
+                        className="w-6 "
+                        alt=""
+                      />
+                    ) : (
+                      <img
+                        src="../public/icons/unmute.svg"
+                        className="w-6 "
+                        alt=""
+                      />
+                    )}
                   </button>
 
                   {index != 0 && (
@@ -145,7 +156,11 @@ function Recommendations({ recommendations = [] }) {
                       className="btn join-item"
                       onClick={handlePrevious}
                     >
-                      Previous
+                      <img
+                        src="../public/icons/previous.svg"
+                        className="w-6 "
+                        alt=""
+                      />
                     </a>
                   )}
 
@@ -154,12 +169,16 @@ function Recommendations({ recommendations = [] }) {
                     className="btn join-item"
                     onClick={handleNext}
                   >
-                    Next
+                    <img
+                      src="../public/icons/next.svg"
+                      className="w-6"
+                      alt=""
+                    />
                   </a>
 
                   {user ? (
                     <button
-                      className="btn btn-outline btn-secondary join-item"
+                      className="btn btn-secondary join-item"
                       onClick={handleAddToLibrary}
                     >
                       <svg
@@ -176,7 +195,10 @@ function Recommendations({ recommendations = [] }) {
                           d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                         />
                       </svg>
-                      Add to Library
+                      <p className="text-xs leading-3">
+                        Add to <br />
+                        Library
+                      </p>
                     </button>
                   ) : null}
                 </div>

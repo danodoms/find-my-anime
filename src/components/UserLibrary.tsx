@@ -81,16 +81,16 @@ function UserLibrary({ user, loading }: LibraryProps) {
 
   function renderLibrary() {
     return (
-      <div className="flex flex-auto rounded p-4">
-        <div className="flex flex-wrap rounded content-around gap-4">
+      <div className="flex flex-auto rounded p-4 py-20 h-dvh">
+        <div className="flex flex-wrap rounded content-start gap-4">
           <div className="flex flex-auto justify-center items-center rounded gap-4">
-            {user ? (
+            {loading ? (
               <h1 className="flex-auto text-3xl font-bold m-0 p-0">
-                Your Library
+                Sign In to Add Animes to Your Library
               </h1>
             ) : (
               <h1 className="flex-auto text-3xl font-bold m-0 p-0">
-                Sign In to Add Animes to Your Library
+                Your Library
               </h1>
             )}
           </div>

@@ -13,10 +13,11 @@ interface LibraryProps {
   error?: Error;
 }
 function Library({ user, loading }: LibraryProps) {
+  //@ts-ignore
   return (
     <div>
       <div className="flex flex-wrap p-2 gap-4">
-        <UserLibrary userProp={user} loading={loading} />
+        <UserLibrary user={user} loading={loading} />
       </div>
     </div>
   );
