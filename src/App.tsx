@@ -23,10 +23,17 @@ import { User } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase";
 
+import { Notifications } from "./interfaces/Notifications";
+
 export const ResultsContext = React.createContext<[any[], any]>([[], 0]);
+export const NotificationsContext = React.createContext<[Notifications, any]>([
+  { addedToLibrary: 0 },
+  0,
+]);
 
 function App() {
   const [results, setResults] = useState([]);
+  const [notifications, setNotifications] = useState({ addedToLibrary: 0 });
   const [selectedAnime, setSelectedAnime] = useState({
     id: 0,
     title: "",
@@ -42,94 +49,49 @@ function App() {
   return (
     <div className="">
       <ResultsContext.Provider value={[results, setResults]}>
-        <BrowserRouter>
-          <div className="flex flex-col flex-wrap bg-base-200 justify-start">
-            <NavBar
-              setResults={setResults}
-              results={results}
-              setSelectedAnime={setSelectedAnime}
-              setRecommendations={setRecommendations}
-              user={user}
-            />
-            <Routes>
-              <Route
-                path="/library"
-                element={
-                  //@ts-ignore
-                  user ? <Library user={user} loading={loading} /> : null
-                }
-              />
-
-              <Route
-                index
-                element={
-                  <Home
-                    results={results}
-                    setResults={setResults}
-                    selectedAnime={selectedAnime}
-                    setSelectedAnime={setSelectedAnime}
-                    setRecommendations={setRecommendations}
-                    user={user}
-                    recommendations={recommendations}
-                  />
-                }
-              />
-            </Routes>
-            <BottomNav />
-          </div>
-        </BrowserRouter>
-      </ResultsContext.Provider>
-    </div>
-  );
-
-  {
-    //>>>>>> THIS IS THE OLD LAYOUT <<<<<<<
-    /* <div className="row pt-2 gap-4 justify-content-left gx-0">
-        <div className="col border">
-          <h1 className="display-6 text-icon border m-0 p-0">Find My Anime</h1>
-          <p className="weight-regular mb-2 p-1">
-            Get anime recommendations based on your fave animes
-          </p>
-
-          <div className="col-md border relative align-items-center p-0">
-            <ResultsContext.Provider value={[results, setResults]}>
-              <SearchBar setResults={setResults} />
-              <SearchResults
+        <NotificationsContext.Provider
+          value={[notifications, setNotifications]}
+        >
+          <BrowserRouter>
+            <div className="flex flex-col flex-wrap bg-base-200 justify-start">
+              <NavBar
+                setResults={setResults}
                 results={results}
                 setSelectedAnime={setSelectedAnime}
                 setRecommendations={setRecommendations}
+                user={user}
               />
-            </ResultsContext.Provider>
-          </div>
+              <Routes>
+                <Route
+                  path="/library"
+                  element={
+                    //@ts-ignore
+                    user ? <Library user={user} loading={loading} /> : null
+                  }
+                />
 
-          <div className="col mt-2">
-            <Offline />
-          </div>
-        </div>
-
-        <div className="col-lg border p-0">
-          <CoverArt title={selectedAnime.title} image={selectedAnime.image} />
-        </div>
-      </div>
-
-      <div className="row">
-        <div className="col p-2">
-          <h4 className="m-0 mb-1"> Based on your selection</h4>
-          <Recommendations recommendations={recommendations} />
-        </div>
-
-        <div className="col-sm-4 p-2">
-          <h4 className="m-0 mb-1"> Library</h4>
-          {user ? (
-            <Library userProp={user} loading={loading} error={error} />
-          ) : (
-            <SignIn />
-          )}
-        </div>
-      </div>
-
-      <DevSection /> */
-  }
+                <Route
+                  index
+                  element={
+                    <Home
+                      results={results}
+                      setResults={setResults}
+                      selectedAnime={selectedAnime}
+                      setSelectedAnime={setSelectedAnime}
+                      setRecommendations={setRecommendations}
+                      user={user}
+                      recommendations={recommendations}
+                    />
+                  }
+                />
+              </Routes>
+              <BottomNav />
+            </div>
+          </BrowserRouter>
+        </NotificationsContext.Provider>
+      </ResultsContext.Provider>
+    </div>
+  );
 }
 
 export default App;

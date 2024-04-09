@@ -9,7 +9,7 @@ function NavBar({
   user,
 }: any) {
   return (
-    <div className="flex flex-col z-10 absolute w-full">
+    <div className="flex flex-col z-10 fixed w-full">
       {!navigator.onLine ? (
         <div className=" py-1 bg-red-500 flex-auto opacity-70 text-center text-gray-800 font-normal">
           You're offline, some functionality may not work

@@ -1,7 +1,13 @@
 import { NavLink } from "react-router-dom";
-import React, { useState } from "react";
+
+import { useContext } from "react";
+
+import { NotificationsContext } from "../App";
 
 function BottomNav() {
+  const [notificationsContext, setNotificationsContext] =
+    useContext(NotificationsContext);
+
   return (
     <div className="btm-nav z-10">
       <NavLink to="/" className={({ isActive }) => (isActive ? "active" : "")}>
@@ -24,6 +30,9 @@ function BottomNav() {
       <NavLink
         to="/library"
         className={({ isActive }) => (isActive ? "active" : "")}
+        onClick={() => {
+          setNotificationsContext({ addedToLibrary: 0 });
+        }}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -39,6 +48,12 @@ function BottomNav() {
             d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
           />
         </svg>
+
+        {notificationsContext.addedToLibrary > 0 ? (
+          <div className="badge badge-sm absolute mb-5 ml-5 p-1 badge-secondary">
+            +{notificationsContext.addedToLibrary}
+          </div>
+        ) : null}
       </NavLink>
     </div>
   );

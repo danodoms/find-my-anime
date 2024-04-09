@@ -52,37 +52,6 @@ function SearchResults({
     </div>
   );
 
-  // return (
-  //   <div className="container position-absolute">
-  //     <ul
-  //       className="list-group"
-  //       style={{ overflow: "auto", maxHeight: "50vh", display: "float" }}
-  //     >
-  //       {results.map((result: any, id: any) => {
-  //         return (
-  //           <li
-  //             className="list-group-item"
-  //             key={id}
-  //             onClick={() => {
-  //               const selectedAnime = {
-  //                 id: result.mal_id,
-  //                 title: result.title,
-  //                 image: result.images.jpg.image_url,
-  //               };
-
-  //               setSelectedAnime(selectedAnime);
-  //               getRecommendations(selectedAnime.id);
-  //               setResultsContext([]);
-  //             }}
-  //           >
-  //             {result.title}
-  //           </li>
-  //         );
-  //       })}
-  //     </ul>
-  //   </div>
-  // );
-
   async function getRecommendations(anime_id: number): Promise<any> {
     try {
       const response = await fetch(

@@ -7,8 +7,14 @@ import Wrapper from "./Wrapper";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { useContext } from "react";
+
+import { NotificationsContext } from "../App";
+
 function Recommendations({ recommendations = [] }) {
   const [user, loading, error] = useAuthState(auth);
+  const [notificationsContext, setNotificationsContext] =
+    useContext(NotificationsContext);
 
   const [trailer, setTrailer] = useState("");
   const [coverArt, setCoverArt] = useState("");
@@ -84,19 +90,12 @@ function Recommendations({ recommendations = [] }) {
       const response = await addToLibrary(animeId, user.uid);
 
       if (response == "success") {
-        // startWindToast("Library", "Added to Library", "success", 3, "top");
         toast.success("Added to Library", { position: "top-center" });
+        const newValue = notificationsContext.addedToLibrary + 1;
+        setNotificationsContext({ addedToLibrary: newValue });
       } else if (response == "already added") {
-        // startWindToast(
-        //   "Library",
-        //   "Already in your Library",
-        //   "warning",
-        //   3,
-        //   "top"
-        // );
         toast.warn("Already in your Library", { position: "top-center" });
       } else if (response == "error") {
-        // startWindToast("Library", "Error adding to Library", "error", 3, "top");
         toast.error("Error adding to Library", { position: "top-center" });
       }
     }
@@ -126,7 +125,7 @@ function Recommendations({ recommendations = [] }) {
                   {/* {recommendation.entry.title} */}
                   {title}
                 </h1>
-                <p className="text-justify sm:text-sm">{synopsis}</p>
+                <p className="text-justify text-sm lg:text-base">{synopsis}</p>
 
                 <div className="join flex flex-auto mt-auto pt-2 ">
                   <button
@@ -136,17 +135,9 @@ function Recommendations({ recommendations = [] }) {
                     }}
                   >
                     {muted ? (
-                      <img
-                        src="../public/icons/mute.svg"
-                        className="w-6 "
-                        alt=""
-                      />
+                      <img src="/icons/mute.svg" className="w-6 " alt="" />
                     ) : (
-                      <img
-                        src="../public/icons/unmute.svg"
-                        className="w-6 "
-                        alt=""
-                      />
+                      <img src="/icons/unmute.svg" className="w-6 " alt="" />
                     )}
                   </button>
 
@@ -156,11 +147,7 @@ function Recommendations({ recommendations = [] }) {
                       className="btn join-item"
                       onClick={handlePrevious}
                     >
-                      <img
-                        src="../public/icons/previous.svg"
-                        className="w-6 "
-                        alt=""
-                      />
+                      <img src="/icons/previous.svg" className="w-6 " alt="" />
                     </a>
                   )}
 
@@ -169,11 +156,7 @@ function Recommendations({ recommendations = [] }) {
                     className="btn join-item"
                     onClick={handleNext}
                   >
-                    <img
-                      src="../public/icons/next.svg"
-                      className="w-6"
-                      alt=""
-                    />
+                    <img src="/icons/next.svg" className="w-6" alt="" />
                   </a>
 
                   {user ? (
