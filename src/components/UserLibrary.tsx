@@ -28,19 +28,8 @@ function UserLibrary({ user, loading }: LibraryProps) {
   const [library, setLibrary] = useState<Anime[]>([]);
   const [userAnimeList, setUserAnimeList] = useState();
 
-  // let library = [];
-
-  // const colRef = collection(db, "animeList");
-  const userDocRef = doc(db, "animeList", user?.uid);
+  const userDocRef = doc(db, "animeList", user.uid);
   const animesSubcolRef = collection(userDocRef, "animes");
-
-  // useEffect(() => {
-  //   console.log("current user state: ", user);
-
-  //   if (user) {
-  //     fetchData(user.uid);return
-  //   }
-  // }, [user]);
 
   useEffect(() => {
     console.log("library: ", library);
@@ -196,18 +185,6 @@ function UserLibrary({ user, loading }: LibraryProps) {
       console.error(error);
       return {}; // Return null or an appropriate value in case of an error
     }
-  }
-
-  function handleSignOut() {
-    signOut(auth)
-      .then(() => {
-        // Sign-out successful.
-        console.log("Signed out");
-      })
-      .catch((error) => {
-        // An error happened.
-        console.log(error);
-      });
   }
 
   function handleDelete(anime_id: number) {

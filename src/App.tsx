@@ -4,7 +4,7 @@ import SearchBar from "./components/SearchBar";
 import SearchResults from "./components/SearchResults";
 import DevSection from "./components/DevSection";
 import Recommendations from "./components/Recommendations";
-import Library from "./components/UserLibrary";
+import Library from "./pages/Library";
 import SignIn from "./components/SignIn";
 import { useState } from "react";
 import React from "react";
@@ -66,7 +66,7 @@ function App() {
                   path="/library"
                   element={
                     //@ts-ignore
-                    user ? <Library user={user} loading={loading} /> : null
+                    <Library user={user} loading={loading} />
                   }
                 />
 

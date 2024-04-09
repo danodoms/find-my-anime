@@ -2,9 +2,7 @@ import Recommendations from "../components/Recommendations";
 import React from "react";
 import "../App.scss";
 import CoverArt from "../components/CoverArt";
-import NavBar from "../components/NavBar";
 import Hero from "../components/Hero";
-import BottomNav from "../components/BottomNav";
 
 function Home({
   selectedAnime,

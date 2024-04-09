@@ -29,9 +29,42 @@ function SignIn({ user }: any) {
 
   function Login() {
     return (
-      <button className=" flex-auto btn text-base" onClick={signInWithGoogle}>
-        Sign in
-      </button>
+      // <button
+      //   className=" flex-auto btn text-sm md:text-base"
+      //   onClick={signInWithGoogle}
+      // >
+      //   Sign in
+      // </button>
+      <div className="dropdown dropdown-end">
+        <div className="flex gap-2">
+          {/* <p className=" self-center text-base">{user.displayName}</p> */}
+          <div
+            tabIndex={0}
+            role="button"
+            className="btn btn-ghost btn-circle avatar"
+          >
+            <div className="w-10 rounded-full">
+              <img
+                alt="Tailwind CSS Navbar component"
+                src={"/icons/user.svg"}
+              />
+            </div>
+          </div>
+        </div>
+
+        <ul
+          tabIndex={0}
+          className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
+        >
+          <li className="pb-2">
+            <h2 className="text-xl">Welcome!</h2>
+          </li>
+
+          <li>
+            <a onClick={signInWithGoogle}>Sign In</a>
+          </li>
+        </ul>
+      </div>
     );
   }
 
@@ -39,7 +72,9 @@ function SignIn({ user }: any) {
     return (
       <div className="dropdown dropdown-end">
         <div className="flex gap-2">
-          {/* <p className=" self-center text-base">{user.displayName}</p> */}
+          <p className="hidden sm:block self-center text-base">
+            {user.displayName}
+          </p>
           <div
             tabIndex={0}
             role="button"
