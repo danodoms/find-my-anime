@@ -1,34 +1,20 @@
 import { useEffect, useState } from "react";
-import { auth, db } from "../firebase";
-import { signOut } from "firebase/auth";
+import { db } from "../firebase";
 import { onSnapshot, collection, doc } from "firebase/firestore";
 
-import {
-  getAnimeListByUserId,
-  deleteFromLibrary,
-  toggleWatchingStatus,
-} from "../models/AnimeList";
+import { deleteFromLibrary, toggleWatchingStatus } from "../models/AnimeList";
 import { Anime } from "../interfaces/jikan";
 import { User } from "firebase/auth";
 
-interface AuthUser {
-  photoURL: string;
-  uid: string;
-  displayName: string;
-}
-
 interface LibraryProps {
-  user: AuthUser;
+  user: User | null | undefined;
   loading: boolean;
   error?: Error;
 }
 
 function UserLibrary({ user, loading }: LibraryProps) {
-  // const [user] = useState<AuthUser>(userProp);
   const [library, setLibrary] = useState<Anime[]>([]);
-  const [userAnimeList, setUserAnimeList] = useState();
-
-  const userDocRef = doc(db, "animeList", user.uid);
+  const userDocRef = doc(db, "animeList", user?.uid ?? "");
   const animesSubcolRef = collection(userDocRef, "animes");
 
   useEffect(() => {
@@ -61,16 +47,40 @@ function UserLibrary({ user, loading }: LibraryProps) {
     }
   }, [user]);
 
-  // async function fetchData(userId: string) {
-  //   const userAnimes = await getAnimeListByUserId(userId);
-  //   await fetchAllAnimes(userAnimes);
-  // }
-
   return renderLibrary();
 
   function renderLibrary() {
+    if (library.length < 1) {
+      return renderLoading();
+    } else {
+      return renderLibraryWithContent();
+    }
+  }
+
+  function renderLoading() {
     return (
-      <div className="flex flex-auto rounded p-4 py-20 h-dvh">
+      <div className="flex flex-auto flex-col rounded p-2 py-20 mb-40 h-dvh">
+        {loading ? (
+          <h1 className="flex-auto text-3xl font-bold m-0 p-0">
+            Sign In to Add Animes to Your Library
+          </h1>
+        ) : (
+          <div className="flex-auto">
+            <h1 className=" text-3xl font-bold m-0 p-0">
+              Fetching Your Library
+            </h1>
+          </div>
+        )}
+        <div className="flex-auto justify-center self-center">
+          <span className="loading loading-spinner loading-lg align-middle"></span>
+        </div>
+      </div>
+    );
+  }
+
+  function renderLibraryWithContent() {
+    return (
+      <div className="flex flex-auto rounded p-2 py-20 mb-40 h-dvh">
         <div className="flex flex-wrap rounded content-start gap-4">
           <div className="flex flex-auto justify-center items-center rounded gap-4">
             {loading ? (
@@ -92,18 +102,18 @@ function UserLibrary({ user, loading }: LibraryProps) {
                 className="flex flex-auto rounded-lg p-2 bg-black gap-2 "
               >
                 <img
-                  className="flex w-20 rounded-lg p-1"
+                  className="grow-0 w-20 rounded "
                   src={anime.data.images.jpg.image_url}
-                  alt=""
+                  alt={anime.data.title}
                 />
 
-                <div className="flex flex-col flex-auto justify-evenly">
-                  <h2 className="flex-auto font-bold text-xl self-start  text-pretty">
+                <div className="flex flex-col flex-1">
+                  <h2 className="flex-1 font-bold text-xl self-center text-center content-center text-pretty leading-6">
                     {anime.data.title}
                   </h2>
 
                   <div
-                    className="flex-auto self-start join lg:join-horizontal"
+                    className="flex-1 sm:self-start items-end mt-auto join lg:join-horizontal"
                     role="group"
                     aria-label="Anime watching options"
                   >
@@ -118,7 +128,7 @@ function UserLibrary({ user, loading }: LibraryProps) {
                     ) : (
                       <button
                         type="button"
-                        className="btn flex-auto btn-outline join-item"
+                        className="btn flex-auto btn-outline join-item "
                         onClick={() => handleWatching(anime.data.mal_id)}
                       >
                         Not Watching
@@ -132,7 +142,7 @@ function UserLibrary({ user, loading }: LibraryProps) {
                     >
                       <img
                         src="/icons/trash-icon.svg"
-                        className="h-6 w-6"
+                        className="h-5 w-5"
                         alt="Delete"
                       />
                     </button>
@@ -188,11 +198,11 @@ function UserLibrary({ user, loading }: LibraryProps) {
   }
 
   function handleDelete(anime_id: number) {
-    deleteFromLibrary(anime_id, user.uid);
+    if (user?.uid) deleteFromLibrary(anime_id, user.uid);
   }
 
   function handleWatching(anime_id: number) {
-    toggleWatchingStatus(user.uid, anime_id);
+    if (user?.uid) toggleWatchingStatus(user?.uid, anime_id);
   }
 }
 

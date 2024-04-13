@@ -7,8 +7,6 @@ import {
   query,
   updateDoc,
   doc,
-  arrayUnion,
-  onSnapshot,
   deleteDoc,
 } from "firebase/firestore";
 import { db } from "../firebase"; // Adjust the import path according to your project structure
@@ -76,46 +74,6 @@ export const getAnimeListByUserId = async (userId: string) => {
     return [];
   }
 };
-
-// export const listenToAnimeUpdatesByUserId = (
-//   userId: string,
-//   callback: (animeList: Anime[]) => void
-// ) => {
-//   const q = query(collection(db, "animeList"), where("user_id", "==", userId));
-
-//   const unsubscribe = onSnapshot(q, (querySnapshot) => {
-//     const animes: Anime[] = [];
-//     querySnapshot.forEach((doc) => {
-//       animes.push(doc.data() as Anime);
-//     });
-//     callback(animes);
-//   });
-//   d;
-
-//   return unsubscribe;
-// };
-
-// export const listenToAnimeUpdatesByUserId = (
-//   userId: string,
-//   updateUI: Function
-// ) => {
-//   // Get a reference to the user document in the animeList collection
-//   const userDocRef = doc(db, "animeList", userId);
-//   // Get a reference to the animes subcollection under the user document
-//   const animesSubcollectionRef = collection(userDocRef, "animes");
-
-//   // Listen for changes in the animes subcollection
-//   const unsubscribe = onSnapshot(animesSubcollectionRef, (snapshot) => {
-//     // Map each document to its data
-//     const animeList = snapshot.docs.map((doc) => doc.data());
-
-//     // Update the UI with the new anime list
-//     updateUI(animeList);
-//   });
-
-//   // Return the unsubscribe function to allow stopping the listener
-//   return unsubscribe;
-// };
 
 /////////////////////////////////////DELETE FUNCTIONSSSSS///////////////////////////////////
 export const deleteFromLibrary = async (animeId: number, userId: string) => {

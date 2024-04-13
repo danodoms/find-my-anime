@@ -11,7 +11,7 @@ function NavBar({
   return (
     <div className="flex flex-col z-10 fixed w-full">
       {!navigator.onLine ? (
-        <div className=" py-1 bg-red-500 flex-auto opacity-70 text-center text-gray-800 font-normal">
+        <div className=" py-0.5  bg-red-500 flex-auto  text-center text-gray-800 font-normal text-sm">
           You're offline, some functionality may not work
         </div>
       ) : null}

@@ -1,4 +1,5 @@
 import UserLibrary from "../components/UserLibrary";
+import { User } from "firebase/auth";
 
 interface AuthUser {
   photoURL: string;
@@ -7,7 +8,7 @@ interface AuthUser {
 }
 
 interface LibraryProps {
-  user: AuthUser;
+  user: User | null | undefined;
   loading: boolean;
   error?: Error;
 }

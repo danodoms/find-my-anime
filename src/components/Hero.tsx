@@ -12,7 +12,18 @@ function Hero() {
           <br />
           Start by clicking on the search bar on top
         </p>
-        <button className="btn btn-primary">Get Started</button>
+        {/* <button className="btn btn-primary">Get Started</button> */}
+
+        <a href="https://github.com/danodoms/find-my-anime" target="_blank">
+          <p className="text-sm">
+            <img
+              className="w-5 pb-1 m-auto opacity-50"
+              src="/icons/github.svg"
+              alt="github logo"
+            />
+            danodoms
+          </p>
+        </a>
       </div>
     </div>
     // </div>

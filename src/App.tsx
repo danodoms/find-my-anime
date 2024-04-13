@@ -1,23 +1,19 @@
 // import "bootstrap/dist/css/bootstrap.min.css";
 // import "bootstrap/dist/js/bootstrap.min.js";
-import SearchBar from "./components/SearchBar";
-import SearchResults from "./components/SearchResults";
-import DevSection from "./components/DevSection";
-import Recommendations from "./components/Recommendations";
-import Library from "./pages/Library";
-import SignIn from "./components/SignIn";
-import { useState } from "react";
+
+import { useState, lazy, Suspense } from "react";
 import React from "react";
 import "./App.scss";
-import CoverArt from "./components/CoverArt";
-import Offline from "./components/Offline";
 import NavBar from "./components/NavBar";
-import Hero from "./components/Hero";
 import BottomNav from "./components/BottomNav";
-import Wrapper from "./components/Wrapper";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
+// import Home from "./pages/Home";
+const Home = lazy(() => import("./pages/Home"));
+// import Library from "./pages/Library";
+const Library = lazy(() => import("./pages/Library"));
 import { User } from "firebase/auth";
+import { motion, AnimatePresence } from "framer-motion";
+import { useLocation } from "react-router-dom";
 
 //FIREBASE RELATED IMPORTS
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -46,6 +42,8 @@ function App() {
 
   const [recommendations, setRecommendations] = useState([]);
 
+  // const location = useLocation();
+
   return (
     <div className="">
       <ResultsContext.Provider value={[results, setResults]}>
@@ -53,40 +51,45 @@ function App() {
           value={[notifications, setNotifications]}
         >
           <BrowserRouter>
-            <div className="flex flex-col flex-wrap bg-base-200 justify-start">
-              <NavBar
-                setResults={setResults}
-                results={results}
-                setSelectedAnime={setSelectedAnime}
-                setRecommendations={setRecommendations}
-                user={user}
-              />
-              <Routes>
-                <Route
-                  path="/library"
-                  element={
-                    //@ts-ignore
-                    <Library user={user} loading={loading} />
-                  }
+            <AnimatePresence>
+              <div className="flex flex-col flex-wrap bg-base-200 justify-start">
+                <NavBar
+                  setResults={setResults}
+                  results={results}
+                  setSelectedAnime={setSelectedAnime}
+                  setRecommendations={setRecommendations}
+                  user={user}
                 />
+                <Routes>
+                  <Route
+                    path="/library"
+                    element={
+                      <Suspense fallback={<div>Loading...</div>}>
+                        <Library user={user} loading={loading} />
+                      </Suspense>
+                    }
+                  />
 
-                <Route
-                  index
-                  element={
-                    <Home
-                      results={results}
-                      setResults={setResults}
-                      selectedAnime={selectedAnime}
-                      setSelectedAnime={setSelectedAnime}
-                      setRecommendations={setRecommendations}
-                      user={user}
-                      recommendations={recommendations}
-                    />
-                  }
-                />
-              </Routes>
-              <BottomNav />
-            </div>
+                  <Route
+                    index
+                    element={
+                      <Suspense fallback={<div>Loading...</div>}>
+                        <Home
+                          results={results}
+                          setResults={setResults}
+                          selectedAnime={selectedAnime}
+                          setSelectedAnime={setSelectedAnime}
+                          setRecommendations={setRecommendations}
+                          user={user}
+                          recommendations={recommendations}
+                        />
+                      </Suspense>
+                    }
+                  />
+                </Routes>
+                <BottomNav />
+              </div>
+            </AnimatePresence>
           </BrowserRouter>
         </NotificationsContext.Provider>
       </ResultsContext.Provider>

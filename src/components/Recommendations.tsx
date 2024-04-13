@@ -1,11 +1,11 @@
 import ReactPlayer from "react-player";
-import { Children, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { auth } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { addToLibrary } from "../models/AnimeList";
-import Wrapper from "./Wrapper";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import SignInModal from "./SignInModal";
 
 import { useContext } from "react";
 
@@ -86,6 +86,12 @@ function Recommendations({ recommendations = [] }) {
   }
 
   async function handleAddToLibrary() {
+    const openModal = () => {
+      const modal = document.getElementById("sign-in-modal");
+      //@ts-ignore
+      if (modal) modal.showModal();
+    };
+
     if (user?.uid && animeId) {
       const response = await addToLibrary(animeId, user.uid);
 
@@ -98,6 +104,8 @@ function Recommendations({ recommendations = [] }) {
       } else if (response == "error") {
         toast.error("Error adding to Library", { position: "top-center" });
       }
+    } else {
+      openModal();
     }
   }
 
@@ -114,6 +122,7 @@ function Recommendations({ recommendations = [] }) {
   function renderRecommendationsWithContent() {
     return (
       <div className="flex flex-wrap flex-auto w-full rounded bg-black">
+        <SignInModal />
         <div className="carousel md:w-1/2 rounded-xl flex-auto ">
           {recommendations.map((id: number) => (
             <div
@@ -159,31 +168,31 @@ function Recommendations({ recommendations = [] }) {
                     <img src="/icons/next.svg" className="w-6" alt="" />
                   </a>
 
-                  {user ? (
-                    <button
-                      className="btn btn-secondary join-item"
-                      onClick={handleAddToLibrary}
+                  {/* {user ? ( */}
+                  <button
+                    className="btn btn-secondary join-item"
+                    onClick={handleAddToLibrary}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                        />
-                      </svg>
-                      <p className="text-xs leading-3">
-                        Add to <br />
-                        Library
-                      </p>
-                    </button>
-                  ) : null}
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                      />
+                    </svg>
+                    <p className="text-xs leading-3">
+                      Add to <br />
+                      Library
+                    </p>
+                  </button>
+                  {/* ) : null} */}
                 </div>
               </div>
             </div>
@@ -226,82 +235,6 @@ function Recommendations({ recommendations = [] }) {
         <ToastContainer />
       </div>
     );
-
-    // return (
-    //   <div className="container rounded gx-0 gy-0">
-    //     <div className="row rounded bg-black">
-    //       <div className="col p-4">
-    //         <h2 className="">{title}</h2>
-    //         <p className="synopsis weight-regular">{synopsis}</p>
-
-    //         <div className="row gap-2">
-    //           <div className="col gx-0 gy-0">
-    //             <button
-    //               className="btn"
-    //               onClick={() => {
-    //                 setMuted(!muted);
-    //               }}
-    //             >
-    //               {muted ? "Unmute" : "Mute"}
-    //             </button>
-
-    //             {index != 0 && (
-    //               <button className="btn" onClick={handlePrevious}>
-    //                 Previous
-    //               </button>
-    //             )}
-
-    //             <button className="btn" onClick={handleNext}>
-    //               Next
-    //             </button>
-
-    //             {user ? (
-    //               <button className="btn" onClick={handleAddToLibrary}>
-    //                 Add to Library
-    //               </button>
-    //             ) : null}
-    //           </div>
-    //         </div>
-    //       </div>
-
-    //       <div className="col-md relative rounded gx-0">
-    //         <div className="col bg-primary gx-0 gy-0">
-    //           <div className="rounded gradient-overlay"></div>
-    //         </div>
-
-    //         {trailer == "" ? (
-    //           <div className="cover-art-wrapper">
-    //             <img src={coverArt} alt="" />
-    //           </div>
-    //         ) : (
-    //           <div className="player-wrapper">
-    //             <ReactPlayer
-    //               className="rounded react-player"
-    //               style={{ borderRadius: "10px" }}
-    //               url={trailer}
-    //               playing={playing}
-    //               muted={muted} //must be muted to enable autoplay feature (not in all cases)
-    //               controls={false}
-    //               width="100%"
-    //               // height="100%"
-    //               loop
-    //               onReady={() => {}}
-    //               onStart={() => {
-    //                 setMuted(false);
-    //                 // @ts-ignore
-    //                 this.player.volume = 0.8; // fade volume up over 0.5 seconds
-    //                 // @ts-ignore
-    //                 this.player.fadeIn(0.5);
-    //                 //@ts-ignore
-    //                 this.player.seekTo(30);
-    //               }}
-    //             />
-    //           </div>
-    //         )}
-    //       </div>
-    //     </div>
-    //   </div>
-    // );
   }
 
   async function setAnimeDetails(anime_id: number): Promise<any> {
