@@ -15,7 +15,7 @@ import { User } from "firebase/auth";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router-dom";
 
-//FIREBASE RELATED IMPORTS
+//FIREBASE RELATED IMPORT
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase";
 
